@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class galery extends Model
 {
-    use HasUuids;
+    use HasFactory;
 
-    protected $table = "galeri";
-    protected $primaryKey = "id_galeri";
-    protected $keyType = 'string';
+    protected $table = 'galeries'; // Sesuaikan dengan nama tabel di DB (galeries/galeri)
+    protected $primaryKey = 'id_galeri';
 
-    protected $guarded =[];
+    protected $fillable = [
+        'judul',
+        'foto',
+        'deskripsi',
+    ];
 }

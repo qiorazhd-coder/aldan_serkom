@@ -4,7 +4,7 @@
 
 <div class="bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between mb-4 shadow-sm" style="height: 70px;">
     <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.25rem;">
-        Tambah Foto Galeri Baru
+        Edit Data Galeri
     </h4>
     <a href="{{ route('galeri.index') }}" class="btn btn-outline-secondary px-3 py-1.5 fw-semibold" style="border-radius: 8px;">
         <i class="fa-solid fa-arrow-left me-1"></i> Kembali
@@ -24,23 +24,34 @@
             </div>
         @endif
 
-        <form action="{{ route('galeri.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('galeri.update', $galeri->id_galeri) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
 
             <div class="mb-3">
                 <label class="form-label fw-semibold text-dark">Judul Foto / Kegiatan <span class="text-danger">*</span></label>
-                <input type="text" name="judul" class="form-control py-2.5" value="{{ old('judul') }}" placeholder="Contoh: Upacara Bendera Hari Senin" required style="border-radius: 8px; background-color: #f8fafc;">
+                <input type="text" name="judul" class="form-control py-2.5" value="{{ old('judul', $galeri->judul) }}" required style="border-radius: 8px; background-color: #f8fafc;">
+            </div>
+
+            <!-- Preview Foto -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-dark d-block">Foto Saat Ini</label>
+                <div class="p-2 border rounded d-inline-block bg-light mb-2">
+                    <img src="{{ asset('storage/' . str_replace('public/', '', $galeri->foto)) }}?t={{ time() }}" 
+                         alt="Preview Foto" 
+                         style="max-width: 200px; max-height: 140px; object-fit: cover; border-radius: 6px;">
+                </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-semibold text-dark">Unggah Foto <span class="text-danger">*</span></label>
-                <input type="file" name="foto" class="form-control py-2" accept="image/*" required style="border-radius: 8px; background-color: #f8fafc;">
-                <small class="text-muted">Format: JPG, PNG, WEBP (Maks 2MB)</small>
+                <label class="form-label fw-semibold text-dark">Ganti Foto (Opsional)</label>
+                <input type="file" name="foto" class="form-control py-2" accept="image/*" style="border-radius: 8px; background-color: #f8fafc;">
+                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah foto. Format: JPG, PNG, WEBP (Maks 2MB)</small>
             </div>
 
             <div class="mb-4">
                 <label class="form-label fw-semibold text-dark">Deskripsi (Opsional)</label>
-                <textarea name="deskripsi" class="form-control" rows="3" placeholder="Keterangan singkat mengenai foto..." style="border-radius: 8px; background-color: #f8fafc;">{{ old('deskripsi') }}</textarea>
+                <textarea name="deskripsi" class="form-control" rows="3" style="border-radius: 8px; background-color: #f8fafc;">{{ old('deskripsi', $galeri->deskripsi) }}</textarea>
             </div>
 
             <div class="pt-3 border-top text-end d-flex justify-content-between align-items-center">
@@ -48,7 +59,7 @@
                     Batal
                 </a>
                 <button type="submit" class="btn text-white px-4 py-2.5 fw-bold shadow-sm" style="background-color: #0d233a; border-radius: 8px;">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>Simpan Foto
+                    <i class="fa-solid fa-floppy-disk me-2"></i>Perbarui Data
                 </button>
             </div>
         </form>

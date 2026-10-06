@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-class guru extends Model
+
+class Guru extends Model
 {
-    use HasUuids;
+    use HasFactory;
 
-    protected $table = "guru";
-    protected $primaryKey = "id_guru";
-    protected $keyType = 'string';
+    protected $table = 'guru';
+    protected $primaryKey = 'id_guru';
 
-    protected $guarded =[];
-
+    protected $fillable = [
+        'nip',
+        'nama_guru',
+        'mapel',
+        'foto',
+    ];
 }

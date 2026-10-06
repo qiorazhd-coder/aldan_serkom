@@ -6,32 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('profile_sekolah', function (Blueprint $table) {
-            $table->uuid('id_profile_sekolah');
-            $table->string('nama_sekolah', 40);
-            $table->string('kepala_sekolah', 40);
-            $table->string('foto', 100);
-            $table->string('logo', 100);
-            $table->string('npsn', 10);
-            $table->text('alamat');
-            $table->string('kontak', 15);
-            $table->text('visi_misi');
-            $table->year('tahun_berdiri', 4);
-            $table->text('deskripsi');
+            $table->id();
+            $table->string('nama_sekolah');
+            $table->string('kepala_sekolah')->nullable();
+            $table->string('npsn', 20)->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('kontak')->nullable();
+            $table->text('visi_misi')->nullable();
+            $table->string('tahun_berdiri', 10)->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('profile_sekolahs');
+        Schema::dropIfExists('profile_sekolah');
     }
 };

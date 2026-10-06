@@ -1,25 +1,22 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Providers;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Models\ProfileSekolah;
 
-class DatabaseSeeder extends Seeder
+class AppServiceProvider extends ServiceProvider
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function register(): void
     {
-        // User::factory(10)->create();
+    }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+    public function boot(): void
+    {
+        View::composer('*', function ($view) {
+            $globalProfile = ProfileSekolah::first();
+            $view->with('globalProfile', $globalProfile);
+        });
     }
 }

@@ -6,22 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
-    public function up(): void
+    public function up()
     {
-        Schema::create('galeri', function (Blueprint $table) {
-            $table->uuid('id_galeri');
-            $table->string('judul', 50);
-            $table->text('keterangan');
-            $table->string('file', 100);
-            $table->enum('kategori',['foto', 'vidio']);
-            $table->date('tanggal');
+        Schema::create('galeries', function (Blueprint $table) {
+            $table->id('id_galeri');
+            $table->string('judul');
+            $table->string('foto');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }
 
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('galerie');
+        Schema::dropIfExists('galeries');
     }
 };

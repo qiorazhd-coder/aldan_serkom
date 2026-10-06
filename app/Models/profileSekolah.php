@@ -2,16 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class profileSekolah extends Model
+class ProfileSekolah extends Model
 {
-    use HasUuids;
+    use HasFactory;
 
-    protected $table = "profile_sekolah";
-    protected $primaryKey = "id_profile_sekolah";
-    protected $keyType = 'string';
+    protected $table = 'profile_sekolah';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'nama_sekolah',
+        'kepala_sekolah',
+        'npsn',
+        'alamat',
+        'kontak',
+        'visi_misi',
+        'tahun_berdiri',
+        'deskripsi',
+        'logo',
+    ];
 }

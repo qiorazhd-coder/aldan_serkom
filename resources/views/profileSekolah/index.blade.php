@@ -2,383 +2,175 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between mb-4 shadow-sm" style="height: 70px;">
+    <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.25rem;">
+        Profil Sekolah - {{ $profileSekolah->nama_sekolah ?? 'SMK YPC TASIKMALAYA' }}
+    </h4>
 
-    {{-- HEADER --}}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="page-header mb-4">
+    <div class="d-flex align-items-center gap-2">
+        <div class="bg-secondary rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        <span class="fw-bold text-dark">{{ Auth::user()->username ?? Auth::user()->name ?? 'admin' }}</span>
+    </div>
+</div>
 
-                <h2 class="title-1">
-                    Profil Sekolah
-                </h2>
+<div class="px-4 pb-4">
 
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.index') }}">
-                                Dashboard
-                            </a>
-                        </li>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4 text-white" 
+             style="background-color: #10b981; border-radius: 10px;" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-                        <li class="breadcrumb-item active">
-                            Profil Sekolah
-                        </li>
-                    </ol>
-                </nav>
+    <div class="row g-4">
+
+        <div class="col-12 col-lg-5 col-xl-4">
+            <div class="card border-0 shadow-sm p-4 text-center h-100 d-flex flex-column align-items-center justify-content-between" style="border-radius: 16px; background: #ffffff;">
+                
+                <div class="w-100">
+                    <div class="my-3">
+                        @if(isset($profileSekolah) && $profileSekolah->logo)
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $profileSekolah->logo)) }}?t={{ time() }}" 
+                                 alt="Logo Sekolah" 
+                                 style="width: 140px; height: 140px; object-fit: contain;">
+                        @else
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center p-3 shadow-sm mx-auto" style="width: 140px; height: 140px;">
+                                <i class="fa-solid fa-school fa-4x text-primary"></i>
+                            </div>
+                        @endif
+                    </div>
+
+                    <h4 class="fw-bold text-dark mb-1">{{ $profileSekolah->nama_sekolah ?? 'SMK YPC TASIKMALAYA' }}</h4>
+                    <p class="text-secondary small mb-4">Sekolah Menengah Kejuruan | Pondok Pesantren<br>Kab. Tasikmalaya, Jawa Barat</p>
+
+                    <div class="text-center mb-4">
+                        <div class="mb-3">
+                            <span class="d-block text-dark fw-bold">NPSN</span>
+                            <span class="text-muted small">{{ $profileSekolah->npsn ?? '-' }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="d-block text-dark fw-bold">Hubungi Sekolah</span>
+                            <span class="text-muted small">{{ $profileSekolah->kontak ?? '-' }}</span>
+                        </div>
+                        <div>
+                            <span class="d-block text-dark fw-bold">Lokasi</span>
+                            <span class="text-muted small">{{ $profileSekolah->alamat ?? 'Tasikmalaya' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 w-100 mt-3">
+                    <a href="#visi_misi" class="btn text-white w-50 py-2 fw-semibold small" style="background-color: #0d233a; border-radius: 8px;">
+                        Lihat Visi & Misi
+                    </a>
+                    <a href="tel:{{ $profileSekolah->kontak ?? '' }}" class="btn text-white w-50 py-2 fw-semibold small" style="background-color: #0d233a; border-radius: 8px;">
+                        Hubungi Sekolah
+                    </a>
+                </div>
 
             </div>
         </div>
-    </div>
 
-
-    {{-- DATA PROFIL SEKOLAH --}}
-    <div class="row">
-        <div class="col-md-12">
-
-            <div class="card">
-
-                {{-- CARD HEADER --}}
-                <div class="card-header d-flex justify-content-between align-items-center">
-
-                    <h4 class="mb-0">
-                        Data Profil Sekolah
-                    </h4>
-
-                    <a href="{{ route('profileSekolah.create') }}"
-                       class="btn btn-primary">
-
-                        <i class="fas fa-plus"></i>
-                        Tambah Data
-
-                    </a>
-
-                </div>
-
-
-                {{-- CARD BODY --}}
-                <div class="card-body">
-
-                    <div class="table-responsive">
-
-                        <table class="table table-bordered table-hover align-middle profile-table">
-
-                            <thead>
-                                <tr>
-
-                                    <th>No</th>
-
-                                    <th>Nama Sekolah</th>
-
-                                    <th>Kepala Sekolah</th>
-
-                                    <th>NPSN</th>
-
-                                    <th>Alamat</th>
-
-                                    <th>Kontak</th>
-
-                                    <th>Visi & Misi</th>
-
-                                    <th>Tahun Berdiri</th>
-
-                                    <th>Foto</th>
-
-                                    <th>Logo</th>
-
-                                    <th>Deskripsi</th>
-
-                                    <th>Aksi</th>
-
-                                </tr>
-                            </thead>
-
-
-                            <tbody>
-
-                                @forelse ($profileSekolah as $data)
-
-                                <tr>
-
-                                    {{-- NO --}}
-                                    <td class="text-center">
-                                        {{ $loop->iteration }}
-                                    </td>
-
-
-                                    {{-- NAMA SEKOLAH --}}
-                                    <td>
-                                        <div class="column-content">
-                                            {{ $data->nama_sekolah ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- KEPALA SEKOLAH --}}
-                                    <td>
-                                        <div class="column-content">
-                                            {{ $data->kepala_sekolah ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- NPSN --}}
-                                    <td>
-                                        <div class="column-content">
-                                            {{ $data->npsn ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- ALAMAT --}}
-                                    <td>
-                                        <div class="column-content address-content">
-                                            {{ $data->alamat ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- KONTAK --}}
-                                    <td>
-                                        <div class="column-content">
-                                            {{ $data->kontak ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- VISI MISI --}}
-                                    <td>
-                                        <div class="column-content long-content">
-                                            {{ $data->visi_misi ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- TAHUN BERDIRI --}}
-                                    <td>
-                                        <div class="column-content text-center">
-                                            {{ $data->tahun_berdiri ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- FOTO --}}
-                                    <td class="text-center">
-
-                                        @if($data->foto)
-
-                                            <img
-                                                src="{{ asset('storage/' . $data->foto) }}"
-                                                alt="Foto Sekolah"
-                                                class="profile-image"
-                                            >
-
-                                        @else
-
-                                            <span class="text-muted">
-                                                Tidak ada foto
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-
-                                    {{-- LOGO --}}
-                                    <td class="text-center">
-
-                                        @if($data->logo)
-
-                                            <img
-                                                src="{{ asset('storage/' . $data->logo) }}"
-                                                alt="Logo Sekolah"
-                                                class="logo-image"
-                                            >
-
-                                        @else
-
-                                            <span class="text-muted">
-                                                Tidak ada logo
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-
-                                    {{-- DESKRIPSI --}}
-                                    <td>
-                                        <div class="column-content description-content">
-                                            {{ $data->deskripsi ?? '-' }}
-                                        </div>
-                                    </td>
-
-
-                                    {{-- AKSI --}}
-                                    <td>
-
-                                        <div class="action-buttons">
-
-                                            {{-- EDIT --}}
-                                            <a
-                                                href="{{ route('profileSekolah.edit', $data->id_profile_sekolah) }}"
-                                                class="btn btn-warning btn-sm"
-                                                title="Edit"
-                                            >
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
-
-                                            {{-- HAPUS --}}
-                                            <form
-                                                action="{{ route('profileSekolah.destroy', $data->id_profile_sekolah) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')"
-                                            >
-
-                                                @csrf
-
-                                                @method('DELETE')
-
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-danger btn-sm"
-                                                    title="Hapus"
-                                                >
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-
-                                            </form>
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                                @empty
-
-                                <tr>
-
-                                    <td
-                                        colspan="12"
-                                        class="text-center py-5"
-                                    >
-
-                                        <i class="fas fa-database fa-2x mb-3 text-muted"></i>
-
-                                        <div>
-                                            Belum ada data profil sekolah.
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                                @endforelse
-
-                            </tbody>
-
-                        </table>
-
+        <div class="col-12 col-lg-7 col-xl-8">
+            <div class="card border-0 shadow-sm p-4 h-100 d-flex flex-column justify-content-between" style="border-radius: 16px; background: #ffffff;">
+                
+                <div class="d-flex flex-column gap-2">
+
+                    <div class="d-flex align-items-center py-2.5 border-bottom">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <i class="fa-solid fa-building fa-lg"></i>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6">Nama Sekolah</div>
+                        <div class="col-7 fw-bold text-dark fs-6">{{ $profileSekolah->nama_sekolah ?? '-' }}</div>
+                    </div>
+
+                    <div class="d-flex align-items-center py-2.5 border-bottom">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <i class="fa-solid fa-user-tie fa-lg"></i>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6">Kepala Sekolah</div>
+                        <div class="col-7 text-dark fs-6">{{ $profileSekolah->kepala_sekolah ?? '-' }}</div>
+                    </div>
+
+                    <div class="d-flex align-items-center py-2.5 border-bottom">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <span class="fw-bold small">NPSN</span>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6">NPSN</div>
+                        <div class="col-7 text-dark fs-6">{{ $profileSekolah->npsn ?? '-' }}</div>
+                    </div>
+
+                    <div class="d-flex align-items-center py-2.5 border-bottom">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <i class="fa-solid fa-location-dot fa-lg"></i>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6">Alamat</div>
+                        <div class="col-7 text-dark fs-6">{{ $profileSekolah->alamat ?? '-' }}</div>
+                    </div>
+
+                    <div class="d-flex align-items-center py-2.5 border-bottom">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <i class="fa-solid fa-phone fa-lg"></i>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6">Kontak</div>
+                        <div class="col-7 text-dark fs-6">{{ $profileSekolah->kontak ?? '-' }}</div>
+                    </div>
+
+                    <div class="d-flex align-items-start py-2.5 border-bottom" id="visi_misi">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center mt-1" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <i class="fa-solid fa-circle-check fa-lg"></i>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6 mt-2">Visi & Misi</div>
+                        <div class="col-7 text-dark fs-6 mt-2">
+                            {!! isset($profileSekolah->visi_misi) ? nl2br(e($profileSekolah->visi_misi)) : '<em class="text-muted">- Belum diisi -</em>' !!}
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center py-2.5 border-bottom">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <i class="fa-solid fa-calendar-days fa-lg"></i>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6">Tahun Berdiri</div>
+                        <div class="col-7 text-dark fs-6">{{ $profileSekolah->tahun_berdiri ?? '-' }}</div>
+                    </div>
+
+                    <div class="d-flex align-items-start py-2.5">
+                        <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center mt-1" style="background-color: #0d233a; width: 42px; height: 42px;">
+                            <i class="fa-solid fa-list fa-lg"></i>
+                        </div>
+                        <div class="col-4 fw-bold text-dark fs-6 mt-2">Deskripsi</div>
+                        <div class="col-7 text-dark fs-6 mt-2">
+                            {!! isset($profileSekolah->deskripsi) ? nl2br(e($profileSekolah->deskripsi)) : '<em class="text-muted">- Belum diisi -</em>' !!}
+                        </div>
                     </div>
 
                 </div>
 
-            </div>
+                <div class="mt-4 pt-3 border-top text-end">
+                    @if(isset($profileSekolah) && ($profileSekolah->id || $profileSekolah->id_profile_sekolah))
+                        <a href="{{ route('profileSekolah.edit', $profileSekolah->id ?? $profileSekolah->id_profile_sekolah) }}" 
+                           class="btn text-white px-4 py-2.5 fw-bold shadow-sm" 
+                           style="background-color: #0d233a; border-radius: 8px;">
+                            <i class="fa-solid fa-pen-to-square me-2"></i>Edit Data Profil
+                        </a>
+                    @else
+                        <a href="{{ route('profileSekolah.create') }}" 
+                           class="btn text-white px-4 py-2.5 fw-bold shadow-sm" 
+                           style="background-color: #0d233a; border-radius: 8px;">
+                            <i class="fa-solid fa-plus me-2"></i>Isi Data Profil
+                        </a>
+                    @endif
+                </div>
 
+            </div>
         </div>
+
     </div>
 
 </div>
-
-
-{{-- STYLE KHUSUS TABEL PROFIL SEKOLAH --}}
-<style>
-
-    /* Jarak antar kolom */
-    .profile-table th,
-    .profile-table td {
-        padding: 15px 20px !important;
-        vertical-align: middle;
-    }
-
-    /* Header tabel */
-    .profile-table thead th {
-        white-space: nowrap;
-        font-weight: 600;
-    }
-
-    /* Isi kolom */
-    .column-content {
-        min-width: 150px;
-        line-height: 1.6;
-        white-space: normal;
-        word-break: break-word;
-    }
-
-    /* Alamat */
-    .address-content {
-        min-width: 220px;
-        max-width: 300px;
-    }
-
-    /* Visi Misi */
-    .long-content {
-        min-width: 250px;
-        max-width: 350px;
-    }
-
-    /* Deskripsi */
-    .description-content {
-        min-width: 250px;
-        max-width: 350px;
-    }
-
-    /* Foto */
-    .profile-image {
-        width: 100px;
-        height: 75px;
-        object-fit: cover;
-        border-radius: 6px;
-        display: block;
-        margin: auto;
-    }
-
-    /* Logo */
-    .logo-image {
-        width: 70px;
-        height: 70px;
-        object-fit: contain;
-        display: block;
-        margin: auto;
-    }
-
-    /* Tombol aksi */
-    .action-buttons {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        align-items: center;
-        min-width: 110px;
-    }
-
-    /* Form hapus */
-    .action-buttons form {
-        margin: 0;
-    }
-
-    /* Supaya tabel tidak terlalu mepet */
-    .profile-table {
-        min-width: 1800px;
-        margin-bottom: 0;
-    }
-
-    /* Scroll horizontal lebih nyaman */
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-</style>
 
 @endsection

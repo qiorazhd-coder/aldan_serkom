@@ -2,62 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\profileSekolah;
+use App\Models\ProfileSekolah;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class profileSekolahController extends Controller
+class ProfileSekolahController extends Controller
 {
     public function index()
     {
-        $profileSekolah = profileSekolah::all();
-
+        $profileSekolah = ProfileSekolah::first();
         return view('profileSekolah.index', compact('profileSekolah'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $profileSekolah = ProfileSekolah::first();
+        if ($profileSekolah) {
+            return redirect()->route('profileSekolah.edit', $profileSekolah->id ?? $profileSekolah->id_profile_sekolah);
+        }
+        return view('profileSekolah.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_sekolah'   => 'required|string|max:255',
+            'kepala_sekolah' => 'nullable|string|max:255',
+            'npsn'           => 'nullable|string|max:50',
+            'alamat'         => 'nullable|string',
+            'kontak'         => 'nullable|string|max:255',
+            'visi_misi'      => 'nullable|string',
+            'tahun_berdiri'  => 'nullable|string|max:10',
+            'deskripsi'      => 'nullable|string',
+            'logo'           => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+        ]);
+
+        $data = $request->except('logo');
+
+        if ($request->hasFile('logo')) {
+            $data['logo'] = $request->file('logo')->store('profile', 'public');
+        }
+
+        ProfileSekolah::create($data);
+
+        return redirect()->route('profileSekolah.index')->with('success', 'Profil sekolah berhasil disimpan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $profileSekolah = ProfileSekolah::findOrFail($id);
+        return view('profileSekolah.edit', compact('profileSekolah'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $profileSekolah = ProfileSekolah::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $request->validate([
+            'nama_sekolah'   => 'required|string|max:255',
+            'kepala_sekolah' => 'nullable|string|max:255',
+            'npsn'           => 'nullable|string|max:50',
+            'alamat'         => 'nullable|string',
+            'kontak'         => 'nullable|string|max:255',
+            'visi_misi'      => 'nullable|string',
+            'tahun_berdiri'  => 'nullable|string|max:10',
+            'deskripsi'      => 'nullable|string',
+            'logo'           => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $data = $request->except('logo');
+
+        if ($request->hasFile('logo')) {
+            if ($profileSekolah->logo) {
+                $oldPath = str_replace('public/', '', $profileSekolah->logo);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+            $data['logo'] = $request->file('logo')->store('profile', 'public');
+        }
+
+        $profileSekolah->update($data);
+
+        return redirect()->route('profileSekolah.index')->with('success', 'Profil sekolah berhasil diperbarui.');
     }
 }
