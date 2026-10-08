@@ -9,20 +9,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('berita', function (Blueprint $table) {
-            $table->id('id_berita');
-            $table->string('judul');
+            $table->increments('id_berita');
+            $table->string('judul', 50);
             $table->text('isi');
-            $table->string('gambar')->nullable();
-            
-            $table->unsignedBigInteger('id_user');
-            
+            $table->date('tanggal')->nullable();
+            $table->string('gambar', 100)->nullable();
+            $table->unsignedInteger('id_user');
             $table->timestamps();
-
-            $table->foreign('id_user')
-                  ->references('id_user')
-                  ->on('users')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
         });
     }
 

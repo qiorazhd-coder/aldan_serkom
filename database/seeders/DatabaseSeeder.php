@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Providers;
+namespace Database\Seeders;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use App\Models\ProfileSekolah;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
-class AppServiceProvider extends ServiceProvider
+class DatabaseSeeder extends Seeder
 {
-    public function register(): void
+    public function run(): void
     {
-    }
-
-    public function boot(): void
-    {
-        View::composer('*', function ($view) {
-            $globalProfile = ProfileSekolah::first();
-            $view->with('globalProfile', $globalProfile);
-        });
+        User::updateOrCreate(
+            ['username' => 'admin'],
+            [
+                'password' => Hash::make('admin123'),
+                'role'     => 'Admin',
+            ]
+        );
     }
 }

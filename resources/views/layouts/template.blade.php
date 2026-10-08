@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Admin - {{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
         }
-        /* Sidebar Styling */
         #sidebar {
             min-width: 260px;
             max-width: 260px;
@@ -47,7 +44,6 @@
             background: #1a365d;
             border-left: 4px solid #f59e0b;
         }
-        /* Content Styling */
         #content {
             width: calc(100% - 260px);
             margin-left: 260px;
@@ -70,7 +66,6 @@
 
     <div class="wrapper d-flex">
         
-        <!-- SIDEBAR ADMIN -->
         <nav id="sidebar">
             <div class="sidebar-header d-flex align-items-center gap-2">
                 @php
@@ -121,7 +116,7 @@
                     </a>
                 </li>
 
-                <!-- Menu Manajemen User: Hanya muncul jika role user adalah 'admin' -->
+                <!-- Menu Manajemen User: Hanya muncul jika role user adalah Admin -->
                 @if(Auth::check() && strtolower(Auth::user()->role) === 'admin')
                 <li>
                     <a href="{{ route('user.index') }}" class="{{ Request::is('user*') ? 'active' : '' }}">
@@ -141,47 +136,31 @@
             </div>
         </nav>
 
-        <!-- PAGE CONTENT -->
         <div id="content">
             
-            <!-- NAVBAR TOP -->
             <nav class="navbar navbar-expand navbar-top px-4 d-flex justify-content-end align-items-center">
-                <!-- Dropdown Profil & Edit User di Pojok Kanan Atas -->
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark gap-2 p-1 rounded-pill pe-3 bg-light border" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        @php
-                            $currentFoto = Auth::user()->foto ?? null;
-                        @endphp
-                        @if($currentFoto)
-                            <img src="{{ asset('storage/' . str_replace('public/', '', $currentFoto)) }}" alt="Foto Profil" class="rounded-circle shadow-sm" style="width: 38px; height: 38px; object-fit: cover;">
-                        @else
-                            <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center shadow-sm fw-bold" style="width: 38px; height: 38px; font-size: 0.9rem;">
-                                {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 1)) }}
-                            </div>
-                        @endif
+                        <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center shadow-sm fw-bold" style="width: 38px; height: 38px; font-size: 0.9rem;">
+                            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                        </div>
                         <div class="d-none d-md-block text-start" style="line-height: 1.2;">
-                            <span class="fw-bold d-block" style="font-size: 0.85rem;">{{ Auth::user()->name ?? Auth::user()->username }}</span>
-                            <small class="text-muted" style="font-size: 0.75rem;">{{ ucfirst(Auth::user()->role ?? 'Admin') }}</small>
+                            <span class="fw-bold d-block" style="font-size: 0.85rem;">{{ Auth::user()->username }}</span>
+                            <small class="text-muted" style="font-size: 0.75rem;">{{ ucfirst(Auth::user()->role) }}</small>
                         </div>
                     </a>
 
-                    <!-- Card Kecil / Dropdown Menu Interaktif -->
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-3 px-2 mt-2" aria-labelledby="adminDropdown" style="width: 240px; border-radius: 14px;">
                         <li class="px-3 pb-2 mb-2 border-bottom text-center">
-                            @if($currentFoto)
-                                <img src="{{ asset('storage/' . str_replace('public/', '', $currentFoto)) }}" alt="Foto Profil" class="rounded-circle shadow-sm mb-2 border" style="width: 55px; height: 55px; object-fit: cover;">
-                            @else
-                                <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center shadow-sm fw-bold mb-2 fs-4" style="width: 55px; height: 55px;">
-                                    {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 1)) }}
-                                </div>
-                            @endif
-                            <h6 class="fw-bold text-dark mb-0">{{ Auth::user()->name }}</h6>
-                            <small class="text-muted">@ {{ Auth::user()->username }}</small>
+                            <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center shadow-sm fw-bold mb-2 fs-4" style="width: 55px; height: 55px;">
+                                {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                            </div>
+                            <h6 class="fw-bold text-dark mb-0">@ {{ Auth::user()->username }}</h6>
+                            <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
                         </li>
 
-                        <!-- Tombol Edit Profile -->
                         <li>
-                            <a class="dropdown-item py-2 px-3 rounded-2 fw-semibold text-dark d-flex align-items-center gap-2" href="{{ route('user.edit', Auth::user()->id_user ?? Auth::user()->id) }}">
+                            <a class="dropdown-item py-2 px-3 rounded-2 fw-semibold text-dark d-flex align-items-center gap-2" href="{{ route('user.edit', Auth::user()->id_user) }}">
                                 <i class="fa-solid fa-user-pen text-primary"></i> Edit Profile
                             </a>
                         </li>
@@ -200,7 +179,6 @@
                 </div>
             </nav>
 
-            <!-- MAIN CONTENT AREA -->
             <main class="main-content">
                 @yield('content')
             </main>
@@ -208,7 +186,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

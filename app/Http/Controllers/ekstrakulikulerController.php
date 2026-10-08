@@ -2,63 +2,94 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ekstrakulikuler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ekstrakulikulerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-         return view ('ekstrakulikuler.index');
+        $ekstrakulikulers = Ekstrakulikuler::all();
+        return view('ekstrakulikuler.index', compact('ekstrakulikulers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('ekstrakulikuler.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_ekskul' => 'required|string|max:255',
+            'deskripsi'   => 'nullable|string',
+            'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('ekskul', 'public');
+        }
+
+        Ekstrakulikuler::create($data);
+
+        return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+        return view('ekstrakulikuler.show', compact('ekstrakulikuler'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+        return view('ekstrakulikuler.edit', compact('ekstrakulikuler'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+
+        $request->validate([
+            'nama_ekskul' => 'required|string|max:255',
+            'deskripsi'   => 'nullable|string',
+            'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            if ($ekstrakulikuler->gambar) {
+                $oldPath = str_replace('public/', '', $ekstrakulikuler->gambar);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+            $data['gambar'] = $request->file('gambar')->store('ekskul', 'public');
+        }
+
+        $ekstrakulikuler->update($data);
+
+        return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+
+        if ($ekstrakulikuler->gambar) {
+            $oldPath = str_replace('public/', '', $ekstrakulikuler->gambar);
+            if (Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+        }
+
+        $ekstrakulikuler->delete();
+
+        return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil dihapus.');
     }
 }

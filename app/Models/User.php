@@ -10,16 +10,17 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users';
+    protected $table = 'users'; // Pastikan string-nya 'users'
     protected $primaryKey = 'id_user';
+    public $timestamps = true;
 
     protected $fillable = [
         'username',
         'password',
+        'role',
     ];
 
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 }

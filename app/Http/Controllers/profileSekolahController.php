@@ -16,11 +16,7 @@ class ProfileSekolahController extends Controller
 
     public function create()
     {
-        $profileSekolah = ProfileSekolah::first();
-        if ($profileSekolah) {
-            return redirect()->route('profileSekolah.edit', $profileSekolah->id ?? $profileSekolah->id_profile_sekolah);
-        }
-        return view('profileSekolah.create');
+        return redirect()->route('profileSekolah.index');
     }
 
     public function store(Request $request)
