@@ -10,13 +10,10 @@ return new class extends Migration
     {
         Schema::create('siswa', function (Blueprint $table) {
             $table->id('id_siswa');
-            $table->string('nisn', 20)->unique();
-            $table->string('nama');
-            $table->string('kelas', 50)->nullable();
-            $table->string('jurusan', 100)->nullable();
-            $table->enum('jenis_kelamin', ['L', 'P', 'Laki-laki', 'Perempuan']);
-            $table->string('tahun_masuk', 10)->nullable(); // Tambahkan kolom ini
-            $table->text('alamat')->nullable();
+            $table->string('nisn', 10)->unique();
+            $table->string('nama_siswa', 40);
+            $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
+            $table->year('tahun_masuk');
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class beritaController extends Controller
 
         $beritas = Berita::when($search, function ($query, $search) {
             return $query->where('judul', 'like', "%{$search}%")
-                         ->orWhere('isi', 'like', "%{$search}%");
+                ->orWhere('isi', 'like', "%{$search}%");
         })->latest()->paginate(10);
 
         return view('berita.index', compact('beritas', 'search'));
@@ -46,11 +46,15 @@ class beritaController extends Controller
         return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan.');
     }
 
-    // Method show untuk melihat detail berita (menggunakan detail.blade.php yang sudah ada)
     public function show($id)
     {
         $berita = Berita::findOrFail($id);
         return view('berita.detail', compact('berita'));
+    }
+
+    public function showDetail($id)
+    {
+        return $this->show($id);
     }
 
     public function edit($id)

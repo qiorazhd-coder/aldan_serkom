@@ -50,7 +50,6 @@
             border-radius: 2px;
         }
 
-        /* Mengatur agar setiap section/menu memenuhi layar penuh (min-height: 100vh) */
         .full-screen-section {
             min-height: 100vh;
             padding-top: 100px;
@@ -61,7 +60,6 @@
             box-sizing: border-box;
         }
 
-        /* 1. Beranda / Hero Section */
         .hero-section {
             position: relative;
             color: white;
@@ -104,7 +102,6 @@
             color: #fff;
         }
 
-        /* Penyesuaian Card agar Proporsional di Layar Penuh */
         .card-custom {
             border: none;
             border-radius: 16px;
@@ -125,7 +122,6 @@
 </head>
 <body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="80">
 
-    <!-- Navbar / Shortcut Menu Bar Atas -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#beranda">
@@ -148,6 +144,7 @@
                     <li class="nav-item"><a class="nav-link" href="#profil">Profil</a></li>
                     <li class="nav-item"><a class="nav-link" href="#guru">Guru & Staf</a></li>
                     <li class="nav-item"><a class="nav-link" href="#berita">Berita</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ekstrakulikuler">Ekskul</a></li>
                     <li class="nav-item"><a class="nav-link" href="#galeri">Galeri</a></li>
                     <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
                     <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
@@ -162,12 +159,11 @@
         </div>
     </nav>
 
-    <!-- 1. Beranda / Hero Section (Full Screen Slider) -->
     <header id="beranda" class="hero-section">
         <div id="heroCarousel" class="carousel slide carousel-fade position-absolute top-0 start-0 w-100 h-100" data-bs-ride="carousel" data-bs-interval="4000">
             <div class="carousel-inner h-100">
-                @if(isset($galeri) && count($galeri) > 0)
-                    @foreach($galeri as $key => $foto)
+                @if(isset($sliderGaleri) && count($sliderGaleri) > 0)
+                    @foreach($sliderGaleri as $key => $foto)
                         @php
                             $imgSource = $foto->gambar ?? $foto->foto ?? null;
                         @endphp
@@ -217,7 +213,6 @@
         </div>
     </header>
 
-    <!-- 2. Profil Sekolah & Sambutan (Full Screen) -->
     <section id="profil" class="full-screen-section bg-white">
         <div class="container">
             <div class="text-center mb-5">
@@ -242,7 +237,6 @@
         </div>
     </section>
 
-    <!-- 3. Guru & Staf Pendidik (Full Screen) -->
     <section id="guru" class="full-screen-section bg-light">
         <div class="container">
             <div class="text-center mb-5">
@@ -252,22 +246,27 @@
             <div class="row g-4 justify-content-center">
                 @forelse($guru as $g)
                     <div class="col-md-3 col-sm-6">
-                        <div class="card card-custom text-center p-4 h-100">
+                        <div class="card card-custom h-100 text-center p-4 d-flex flex-column">
                             <div class="mb-3 mt-2">
                                 @php
                                     $fotoGuru = $g->foto ?? $g->gambar ?? null;
                                 @endphp
                                 @if($fotoGuru)
-                                    <img src="{{ asset('storage/' . str_replace('public/', '', $fotoGuru)) }}" alt="Foto Guru" class="rounded-circle shadow-sm border" style="width: 100px; height: 100px; object-fit: cover;">
+                                    <img src="{{ asset('storage/' . str_replace('public/', '', $fotoGuru)) }}" alt="Foto Guru" class="rounded-circle shadow-sm border mx-auto" style="width: 100px; height: 100px; object-fit: cover;">
                                 @else
-                                    <div class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 100px; height: 100px;">
+                                    <div class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center shadow-sm mx-auto" style="width: 100px; height: 100px;">
                                         <i class="fa-solid fa-user fa-2x"></i>
                                     </div>
                                 @endif
                             </div>
                             <h5 class="fw-bold text-dark mb-1">{{ $g->nama_guru }}</h5>
                             <span class="badge bg-light text-dark border px-3 py-1.5 mb-2">{{ $g->mapel }}</span>
-                            <small class="text-muted">NIP: {{ $g->nip ?? '-' }}</small>
+                            <small class="text-muted mb-3 d-block">NIP: {{ $g->nip ?? '-' }}</small>
+                            <div class="mt-auto">
+                                <a href="{{ route('guru.detail', $g->id_guru ?? $g->id) }}" class="btn btn-sm btn-outline-dark px-3 py-2 rounded-pill fw-semibold w-100">
+                                    Selengkapnya <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @empty
@@ -279,7 +278,6 @@
         </div>
     </section>
 
-    <!-- 4. Berita & Informasi (Full Screen) -->
     <section id="berita" class="full-screen-section bg-white">
         <div class="container">
             <div class="text-center mb-5">
@@ -301,7 +299,7 @@
                                 </div>
                             @endif
                             <div class="card-body p-4 d-flex flex-column flex-grow-1">
-                                <small class="text-muted d-block mb-2"><i class="fa-regular fa-calendar me-1"></i>{{ $item->created_at->format('d M Y') }}</small>
+                                <small class="text-muted d-block mb-2"><i class="fa-regular fa-calendar me-1"></i>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d M Y') : '-' }}</small>
                                 <h5 class="fw-bold text-dark mb-2">{{ $item->judul }}</h5>
                                 <p class="text-secondary small mb-3 flex-grow-1">{{ Str::limit(strip_tags($item->isi), 80) }}</p>
                                 <div class="mt-auto">
@@ -321,27 +319,86 @@
         </div>
     </section>
 
-    <!-- 5. Galeri Kegiatan (Full Screen) -->
-    <section id="galeri" class="full-screen-section bg-light">
+    <!-- SECTION EKSTRAKURIKULER -->
+    <section id="ekstrakulikuler" class="full-screen-section bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-semibold mb-2">Kegiatan Siswa</span>
+                <h2 class="fw-bold text-dark display-6">Ekstrakurikuler Sekolah</h2>
+                <p class="text-muted lead fs-6">Wadah pengembangan bakat, minat, dan kreativitas siswa.</p>
+            </div>
+            <div class="row g-4">
+                @isset($ekstrakulikulers)
+                    @forelse($ekstrakulikulers as $item)
+                        <div class="col-md-4">
+                            <div class="card card-custom h-100 overflow-hidden d-flex flex-column">
+                                @if($item->gambar)
+                                    <img src="{{ asset('storage/' . str_replace('public/', '', $item->gambar)) }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="{{ $item->nama_ekskul }}">
+                                @else
+                                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 220px;">
+                                        <i class="fa-solid fa-futbol fa-3x"></i>
+                                    </div>
+                                @endif
+                                <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                                    <h5 class="fw-bold text-dark mb-2">{{ $item->nama_ekskul }}</h5>
+                                    <p class="text-muted small mb-3">
+                                        <i class="fa-solid fa-user-tie me-1 text-warning"></i> Pembina: {{ $item->pembina ?? '-' }}<br>
+                                        <i class="fa-solid fa-calendar-days me-1 text-warning"></i> Jadwal: {{ $item->jadwal_latihan ?? '-' }}
+                                    </p>
+                                    <p class="text-secondary small mb-3 flex-grow-1">{{ Str::limit(strip_tags($item->deskripsi), 80) }}</p>
+                                    <div class="mt-auto">
+                                        <a href="{{ route('ekstrakulikuler.detail', $item->id_ekstrakulikuler) }}" class="btn btn-sm btn-outline-dark px-3 py-2 rounded-pill fw-semibold w-100">
+                                            Selengkapnya <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12 text-center py-4 text-muted">
+                            <p>Belum ada data ekstrakurikuler.</p>
+                        </div>
+                    @endforelse
+                @endisset
+            </div>
+            <div class="text-center mt-5">
+                <a href="{{ route('ekstrakulikuler.index') }}" class="btn btn-dark rounded-pill px-4 py-2 fw-semibold">
+                    Lihat Semua Ekstrakurikuler <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="galeri" class="full-screen-section bg-white">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="fw-bold text-dark display-6">Galeri Kegiatan Sekolah</h2>
                 <p class="text-muted lead fs-6">Dokumentasi momen berharga dan fasilitas kampus.</p>
             </div>
-            <div class="row g-4 justify-content-center">
+            <div class="row g-4">
                 @forelse($galeri as $foto)
-                    <div class="col-6 col-md-4">
-                        <div class="card card-custom overflow-hidden h-100">
+                    <div class="col-md-4">
+                        <div class="card card-custom h-100 overflow-hidden d-flex flex-column">
                             @php
                                 $fotoGaleri = $foto->gambar ?? $foto->foto ?? null;
                             @endphp
                             @if($fotoGaleri)
-                                <img src="{{ asset('storage/' . str_replace('public/', '', $fotoGaleri)) }}" class="w-100" style="height: 240px; object-fit: cover;" alt="Galeri">
+                                <img src="{{ asset('storage/' . str_replace('public/', '', $fotoGaleri)) }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Galeri">
                             @else
-                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 240px;">
+                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 220px;">
                                     <i class="fa-solid fa-images fa-3x"></i>
                                 </div>
                             @endif
+                            <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                                <small class="text-muted d-block mb-2"><i class="fa-regular fa-calendar me-1"></i>{{ $foto->created_at ? \Carbon\Carbon::parse($foto->created_at)->format('d M Y') : '-' }}</small>
+                                <h5 class="fw-bold text-dark mb-2">{{ $foto->judul }}</h5>
+                                <p class="text-secondary small mb-3 flex-grow-1">{{ Str::limit($foto->deskripsi ?? 'Dokumentasi kegiatan sekolah.', 80) }}</p>
+                                <div class="mt-auto">
+                                    <a href="{{ route('galeri.detail', $foto->id_galeri) }}" class="btn btn-sm btn-outline-dark px-3 py-2 rounded-pill fw-semibold w-100">
+                                        Selengkapnya <i class="fa-solid fa-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @empty
@@ -353,7 +410,6 @@
         </div>
     </section>
 
-    <!-- 6. Footer / Kontak (Full Screen) -->
     <footer id="kontak" class="full-screen-section justify-content-between" style="min-height: 80vh;">
         <div class="container my-auto py-5">
             <div class="row g-5 mb-4">
@@ -374,6 +430,7 @@
                         <li class="mb-2"><a href="#profil" class="text-decoration-none text-light opacity-75">Profil</a></li>
                         <li class="mb-2"><a href="#guru" class="text-decoration-none text-light opacity-75">Guru & Staf</a></li>
                         <li class="mb-2"><a href="#berita" class="text-decoration-none text-light opacity-75">Berita</a></li>
+                        <li class="mb-2"><a href="#ekstrakulikuler" class="text-decoration-none text-light opacity-75">Ekstrakurikuler</a></li>
                         <li class="mb-2"><a href="#galeri" class="text-decoration-none text-light opacity-75">Galeri</a></li>
                     </ul>
                 </div>
@@ -388,7 +445,6 @@
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Skrip untuk mendeteksi posisi scroll aktif di menu navbar secara otomatis
         window.addEventListener('scroll', function() {
             let sections = document.querySelectorAll('header, section, footer');
             let navLinks = document.querySelectorAll('.navbar-nav .nav-link');

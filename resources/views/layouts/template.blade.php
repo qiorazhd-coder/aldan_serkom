@@ -101,7 +101,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('ekstrakurikuler.index') }}" class="{{ Request::is('ekstrakurikuler*') ? 'active' : '' }}">
+                    <a href="{{ route('ekstrakulikuler.index') }}" class="{{ Request::is('ekstrakurikuler*') ? 'active' : '' }}">
                         <i class="fa-solid fa-basketball me-2"></i> Ekstrakurikuler
                     </a>
                 </li>
@@ -116,7 +116,6 @@
                     </a>
                 </li>
 
-                <!-- Menu Manajemen User: Hanya muncul jika role user adalah Admin -->
                 @if(Auth::check() && strtolower(Auth::user()->role) === 'admin')
                 <li>
                     <a href="{{ route('user.index') }}" class="{{ Request::is('user*') ? 'active' : '' }}">
@@ -142,30 +141,31 @@
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark gap-2 p-1 rounded-pill pe-3 bg-light border" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center shadow-sm fw-bold" style="width: 38px; height: 38px; font-size: 0.9rem;">
-                            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                            {{ Auth::check() ? strtoupper(substr(Auth::user()->username, 0, 1)) : 'A' }}
                         </div>
                         <div class="d-none d-md-block text-start" style="line-height: 1.2;">
-                            <span class="fw-bold d-block" style="font-size: 0.85rem;">{{ Auth::user()->username }}</span>
-                            <small class="text-muted" style="font-size: 0.75rem;">{{ ucfirst(Auth::user()->role) }}</small>
+                            <span class="fw-bold d-block" style="font-size: 0.85rem;">{{ Auth::user()?->username ?? 'Guest' }}</span>
+                            <small class="text-muted" style="font-size: 0.75rem;">{{ ucfirst(Auth::user()?->role ?? 'Tamu') }}</small>
                         </div>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-3 px-2 mt-2" aria-labelledby="adminDropdown" style="width: 240px; border-radius: 14px;">
                         <li class="px-3 pb-2 mb-2 border-bottom text-center">
                             <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center shadow-sm fw-bold mb-2 fs-4" style="width: 55px; height: 55px;">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                                {{ Auth::check() ? strtoupper(substr(Auth::user()->username, 0, 1)) : 'A' }}
                             </div>
-                            <h6 class="fw-bold text-dark mb-0">@ {{ Auth::user()->username }}</h6>
-                            <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
+                            <h6 class="fw-bold text-dark mb-0">@ {{ Auth::user()?->username ?? 'Guest' }}</h6>
+                            <small class="text-muted">{{ ucfirst(Auth::user()?->role ?? 'Tamu') }}</small>
                         </li>
 
+                        @auth
                         <li>
                             <a class="dropdown-item py-2 px-3 rounded-2 fw-semibold text-dark d-flex align-items-center gap-2" href="{{ route('user.edit', Auth::user()->id_user) }}">
                                 <i class="fa-solid fa-user-pen text-primary"></i> Edit Profile
                             </a>
                         </li>
-
                         <li><hr class="dropdown-divider my-2"></li>
+                        @endauth
 
                         <li>
                             <form action="{{ route('logout') }}" method="POST">

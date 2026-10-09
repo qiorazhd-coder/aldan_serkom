@@ -43,7 +43,7 @@
                             <th class="py-3 px-3" style="width: 180px;">NIP</th>
                             <th class="py-3 px-3">Nama Lengkap Guru</th>
                             <th class="py-3 px-3">Mata Pelajaran (Mapel)</th>
-                            <th class="py-3 px-4 text-center" style="width: 180px;">Aksi</th>
+                            <th class="py-3 px-4 text-center" style="width: 250px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,6 +74,14 @@
                                 </td>
                                 <td class="text-center px-4">
                                     <div class="d-flex justify-content-center gap-2">
+                                        <!-- Tombol Detail Publik -->
+                                        <a href="{{ route('guru.detail', $item->id_guru ?? $item->id) }}" 
+                                           class="btn btn-sm btn-outline-info fw-semibold px-2.5 py-1.5" 
+                                           style="border-radius: 6px;" 
+                                           title="Lihat Detail">
+                                            <i class="fa-solid fa-eye me-1"></i> Detail
+                                        </a>
+
                                         <a href="{{ route('guru.edit', $item->id_guru) }}" 
                                            class="btn btn-sm btn-outline-warning fw-semibold px-2.5 py-1.5" 
                                            style="border-radius: 6px;" 

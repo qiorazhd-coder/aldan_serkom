@@ -2,7 +2,6 @@
 
 @section('content')
 
-<!-- Topbar Header -->
 <div class="bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between mb-4 shadow-sm" style="height: 70px;">
     <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.25rem;">
         Data Galeri Foto
@@ -34,14 +33,14 @@
                             <th class="py-3 px-3">Judul Foto / Kegiatan</th>
                             <th class="py-3 px-3">Deskripsi</th>
                             <th class="py-3 px-3 text-center" style="width: 170px;">Tanggal Unggah</th>
-                            <th class="py-3 px-4 text-center" style="width: 180px;">Aksi</th>
+                            <th class="py-3 px-4 text-center" style="width: 240px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($galeri as $index => $item)
+                        @forelse($galeries as $index => $item)
                             <tr>
                                 <td class="text-center fw-bold text-secondary px-4">
-                                    {{ $galeri->firstItem() + $index }}
+                                    {{ $galeries->firstItem() + $index }}
                                 </td>
                                 <td class="text-center px-3 py-2">
                                     <div class="rounded overflow-hidden shadow-sm d-inline-block border" style="width: 90px; height: 60px; background-color: #f8fafc;">
@@ -64,10 +63,17 @@
                                 </td>
                                 <td class="text-center px-4">
                                     <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('galeri.detail', $item->id_galeri) }}" 
+                                             class="btn btn-sm btn-outline-info fw-semibold px-2.5 py-1.5" 
+                                             style="border-radius: 6px;" 
+                                             title="Lihat Detail">
+                                            <i class="fa-solid fa-eye me-1"></i> Detail
+                                        </a>
+
                                         <a href="{{ route('galeri.edit', $item->id_galeri) }}" 
-                                           class="btn btn-sm btn-outline-warning fw-semibold px-2.5 py-1.5" 
-                                           style="border-radius: 6px;" 
-                                           title="Edit Data">
+                                             class="btn btn-sm btn-outline-warning fw-semibold px-2.5 py-1.5" 
+                                             style="border-radius: 6px;" 
+                                             title="Edit Data">
                                             <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                                         </a>
 
@@ -99,9 +105,9 @@
             </div>
         </div>
 
-        @if($galeri->hasPages())
+        @if($galeries->hasPages())
             <div class="card-footer bg-white border-0 py-3 px-4 d-flex justify-content-center">
-                {{ $galeri->links() }}
+                {{ $galeries->links() }}
             </div>
         @endif
     </div>

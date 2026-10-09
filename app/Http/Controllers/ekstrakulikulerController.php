@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ekstrakulikulerController extends Controller
 {
+    // ================= ADMIN CRUD =================
     public function index()
     {
         $ekstrakulikulers = Ekstrakulikuler::all();
@@ -22,12 +23,14 @@ class ekstrakulikulerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_ekskul' => 'required|string|max:255',
-            'deskripsi'   => 'nullable|string',
-            'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'nama_ekskul'    => 'required|string|max:40',
+            'pembina'        => 'required|string|max:40',
+            'jadwal_latihan' => 'required|string|max:40',
+            'deskripsi'      => 'nullable|string',
+            'gambar'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $data = $request->except('gambar');
+        $data = $request->only(['nama_ekskul', 'pembina', 'jadwal_latihan', 'deskripsi']);
 
         if ($request->hasFile('gambar')) {
             $data['gambar'] = $request->file('gambar')->store('ekskul', 'public');
@@ -55,12 +58,14 @@ class ekstrakulikulerController extends Controller
         $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
 
         $request->validate([
-            'nama_ekskul' => 'required|string|max:255',
-            'deskripsi'   => 'nullable|string',
-            'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'nama_ekskul'    => 'required|string|max:40',
+            'pembina'        => 'required|string|max:40',
+            'jadwal_latihan' => 'required|string|max:40',
+            'deskripsi'      => 'nullable|string',
+            'gambar'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $data = $request->except('gambar');
+        $data = $request->only(['nama_ekskul', 'pembina', 'jadwal_latihan', 'deskripsi']);
 
         if ($request->hasFile('gambar')) {
             if ($ekstrakulikuler->gambar) {
@@ -77,6 +82,12 @@ class ekstrakulikulerController extends Controller
         return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil diperbarui.');
     }
 
+    public function showDetail($id)
+    {
+        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+        return view('ekstrakulikuler.detail', compact('ekstrakulikuler'));
+    }
+
     public function destroy($id)
     {
         $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
@@ -91,5 +102,18 @@ class ekstrakulikulerController extends Controller
         $ekstrakulikuler->delete();
 
         return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil dihapus.');
+    }
+
+    // ================= PUBLIK / LANDING PAGE =================
+    public function publicIndex()
+    {
+        $ekstrakulikulers = Ekstrakulikuler::latest()->get();
+        return view('landing.ekstrakulikuler', compact('ekstrakulikulers'));
+    }
+
+    public function publicDetail($id)
+    {
+        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+        return view('landing.ekstrakulikuler-detail', compact('ekstrakulikuler'));
     }
 }

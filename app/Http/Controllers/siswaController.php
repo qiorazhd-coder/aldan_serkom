@@ -12,11 +12,9 @@ class siswaController extends Controller
         $search = $request->input('search');
 
         $siswa = Siswa::when($search, function ($query, $search) {
-            return $query->where('nama', 'like', "%{$search}%")
-                         ->orWhere('nisn', 'like', "%{$search}%")
-                         ->orWhere('kelas', 'like', "%{$search}%")
-                         ->orWhere('jurusan', 'like', "%{$search}%");
-        })->latest()->paginate(10);
+            return $query->where('nama_siswa', 'like', "%{$search}%")
+                         ->orWhere('nisn', 'like', "%{$search}%");
+        })->latest('id_siswa')->paginate(10);
 
         return view('siswa.index', compact('siswa', 'search'));
     }
@@ -29,21 +27,17 @@ class siswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nisn'          => 'required|string|max:20|unique:siswa,nisn',
-            'nama'          => 'required|string|max:255',
-            'kelas'         => 'required|string|max:50',
-            'jurusan'       => 'required|string|max:100',
-            'jenis_kelamin' => 'required|in:L,P',
-            'alamat'        => 'nullable|string',
+            'nisn'          => 'required|string|max:10|unique:siswa,nisn',
+            'nama_siswa'    => 'required|string|max:40',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+            'tahun_masuk'   => 'required|digits:4',
         ]);
 
         Siswa::create([
             'nisn'          => $request->nisn,
-            'nama'          => $request->nama,
-            'kelas'         => $request->kelas,
-            'jurusan'       => $request->jurusan,
+            'nama_siswa'    => $request->nama_siswa,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'alamat'        => $request->alamat,
+            'tahun_masuk'   => $request->tahun_masuk,
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil ditambahkan.');
@@ -60,24 +54,26 @@ class siswaController extends Controller
         $siswa = Siswa::findOrFail($id);
 
         $request->validate([
-            'nisn'          => 'required|string|max:20|unique:siswa,nisn,' . $id . ',id_siswa',
-            'nama'          => 'required|string|max:255',
-            'kelas'         => 'required|string|max:50',
-            'jurusan'       => 'required|string|max:100',
-            'jenis_kelamin' => 'required|in:L,P',
-            'alamat'        => 'nullable|string',
+            'nisn'          => 'required|string|max:10|unique:siswa,nisn,' . $id . ',id_siswa',
+            'nama_siswa'    => 'required|string|max:40',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+            'tahun_masuk'   => 'required|digits:4',
         ]);
 
         $siswa->update([
             'nisn'          => $request->nisn,
-            'nama'          => $request->nama,
-            'kelas'         => $request->kelas,
-            'jurusan'       => $request->jurusan,
+            'nama_siswa'    => $request->nama_siswa,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'alamat'        => $request->alamat,
+            'tahun_masuk'   => $request->tahun_masuk,
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil diperbarui.');
+    }
+
+    public function showDetail($id)
+    {
+        $siswa = Siswa::findOrFail($id);
+        return view('siswa.detail', compact('siswa'));
     }
 
     public function destroy($id)

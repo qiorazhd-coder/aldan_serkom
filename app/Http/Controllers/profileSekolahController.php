@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProfileSekolah;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB; 
 
 class ProfileSekolahController extends Controller
 {
@@ -14,71 +14,48 @@ class ProfileSekolahController extends Controller
         return view('profileSekolah.index', compact('profileSekolah'));
     }
 
-    public function create()
+    public function edit()
     {
-        return redirect()->route('profileSekolah.index');
+        $profileSekolah = ProfileSekolah::first() ?? new ProfileSekolah();
+
+        return view('profileSekolah.edit', compact('profileSekolah')); 
     }
 
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $request->validate([
             'nama_sekolah'   => 'required|string|max:255',
             'kepala_sekolah' => 'nullable|string|max:255',
             'npsn'           => 'nullable|string|max:50',
             'alamat'         => 'nullable|string',
-            'kontak'         => 'nullable|string|max:255',
-            'visi_misi'      => 'nullable|string',
+            'kontak'         => 'nullable|string|max:50',
             'tahun_berdiri'  => 'nullable|string|max:10',
+            'visi_misi'      => 'nullable|string',
             'deskripsi'      => 'nullable|string',
-            'logo'           => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'logo'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->except('logo');
+        $data = $request->only([
+            'nama_sekolah', 'kepala_sekolah', 'npsn', 'alamat', 
+            'kontak', 'tahun_berdiri', 'visi_misi', 'deskripsi'
+        ]);
 
         if ($request->hasFile('logo')) {
             $data['logo'] = $request->file('logo')->store('profile', 'public');
         }
 
-        ProfileSekolah::create($data);
+        $exists = DB::table('profile_sekolah')->exists();
 
-        return redirect()->route('profileSekolah.index')->with('success', 'Profil sekolah berhasil disimpan.');
-    }
-
-    public function edit($id)
-    {
-        $profileSekolah = ProfileSekolah::findOrFail($id);
-        return view('profileSekolah.edit', compact('profileSekolah'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $profileSekolah = ProfileSekolah::findOrFail($id);
-
-        $request->validate([
-            'nama_sekolah'   => 'required|string|max:255',
-            'kepala_sekolah' => 'nullable|string|max:255',
-            'npsn'           => 'nullable|string|max:50',
-            'alamat'         => 'nullable|string',
-            'kontak'         => 'nullable|string|max:255',
-            'visi_misi'      => 'nullable|string',
-            'tahun_berdiri'  => 'nullable|string|max:10',
-            'deskripsi'      => 'nullable|string',
-            'logo'           => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
-        ]);
-
-        $data = $request->except('logo');
-
-        if ($request->hasFile('logo')) {
-            if ($profileSekolah->logo) {
-                $oldPath = str_replace('public/', '', $profileSekolah->logo);
-                if (Storage::disk('public')->exists($oldPath)) {
-                    Storage::disk('public')->delete($oldPath);
-                }
-            }
-            $data['logo'] = $request->file('logo')->store('profile', 'public');
+        if ($exists) {
+            DB::table('profile_sekolah')->update(array_merge($data, [
+                'updated_at' => now()
+            ]));
+        } else {
+            DB::table('profile_sekolah')->insert(array_merge($data, [
+                'created_at' => now(),
+                'updated_at' => now()
+            ]));
         }
-
-        $profileSekolah->update($data);
 
         return redirect()->route('profileSekolah.index')->with('success', 'Profil sekolah berhasil diperbarui.');
     }

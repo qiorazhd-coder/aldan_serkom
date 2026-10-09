@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $berita->judul }} - {{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</title>
+    <title>{{ $berita->judul }} | {{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA' }}</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome Icons -->
@@ -48,11 +48,19 @@
                 @else
                     <i class="fa-solid fa-graduation-cap text-warning fs-3"></i>
                 @endif
-                <span>{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</span>
+                <span>{{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA' }}</span>
             </a>
-            <a href="{{ route('landing') }}#berita" class="btn btn-sm btn-outline-dark px-3 rounded-pill fw-semibold">
-                <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Beranda
-            </a>
+            
+            <!-- Tombol Kembali Pintar pada Navbar -->
+            @auth
+                <a href="{{ url()->previous() }}" class="btn btn-sm btn-outline-dark px-3 rounded-pill fw-semibold">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+                </a>
+            @else
+                <a href="{{ route('landing') }}#berita" class="btn btn-sm btn-outline-dark px-3 rounded-pill fw-semibold">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Beranda
+                </a>
+            @endauth
         </div>
     </nav>
 
@@ -92,11 +100,17 @@
                         {!! $berita->isi !!}
                     </div>
 
-                    <!-- Tombol Kembali -->
+                    <!-- Tombol Kembali Pintar di Bagian Bawah -->
                     <div class="mt-5 pt-4 border-top d-flex justify-content-between align-items-center">
-                        <a href="{{ route('landing') }}#berita" class="btn btn-dark px-4 py-2 rounded-pill fw-semibold">
-                            <i class="fa-solid fa-arrow-left me-2"></i>Berita Lainnya
-                        </a>
+                        @auth
+                            <a href="{{ url()->previous() }}" class="btn btn-dark px-4 py-2 rounded-pill fw-semibold">
+                                <i class="fa-solid fa-arrow-left me-2"></i>Kembali
+                            </a>
+                        @else
+                            <a href="{{ route('landing') }}#berita" class="btn btn-dark px-4 py-2 rounded-pill fw-semibold">
+                                <i class="fa-solid fa-arrow-left me-2"></i>Berita Lainnya
+                            </a>
+                        @endauth
                     </div>
                 </div>
             </div>
@@ -106,7 +120,7 @@
     <!-- Footer -->
     <footer class="py-4 text-center">
         <div class="container text-muted small">
-            &copy; {{ date('Y') }} {{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}. All rights reserved.
+            &copy; {{ date('Y') }} {{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA' }}. All rights reserved.
         </div>
     </footer>
 

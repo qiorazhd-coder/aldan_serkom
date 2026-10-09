@@ -10,8 +10,8 @@ class galeriController extends Controller
 {
     public function index()
     {
-        $galeri = galery::latest()->paginate(10);
-        return view('galeri.index', compact('galeri'));
+        $galeries = galery::latest()->paginate(10);
+        return view('galeri.index', compact('galeries'));
     }
 
     public function create()
@@ -22,42 +22,50 @@ class galeriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul'     => 'required|string|max:255',
+            'judul'     => 'nullable|string|max:255',
             'foto'      => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'deskripsi' => 'nullable|string',
         ]);
 
-        $fotoPath = $request->file('foto')->store('galeri', 'public');
+        $data = $request->only(['judul', 'deskripsi']);
 
-        galery::create([
-            'judul'     => $request->judul,
-            'foto'      => $fotoPath,
-            'deskripsi' => $request->deskripsi,
-        ]);
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('galeri', 'public');
+        }
 
-        return redirect()->route('galeri.index')->with('success', 'Foto galeri berhasil ditambahkan.');
+        galery::create($data);
+
+        return redirect()->route('galeri.index')->with('success', 'Galeri berhasil ditambahkan.');
+    }
+
+    public function show($id)
+    {
+        $galeri = galery::where('id_galeri', $id)->firstOrFail();
+        return view('galeri.detail', compact('galeri'));
+    }
+
+    public function showDetail($id)
+    {
+        return $this->show($id);
     }
 
     public function edit($id)
     {
-        $galeri = galery::findOrFail($id);
+        $galeri = galery::where('id_galeri', $id)->firstOrFail();
         return view('galeri.edit', compact('galeri'));
     }
 
     public function update(Request $request, $id)
     {
-        $galeri = galery::findOrFail($id);
+        $galeri = galery::where('id_galeri', $id)->firstOrFail();
 
         $request->validate([
-            'judul'     => 'required|string|max:255',
+            'judul'     => 'nullable|string|max:255',
             'foto'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'deskripsi' => 'nullable|string',
         ]);
 
-        $data = [
-            'judul'     => $request->judul,
-            'deskripsi' => $request->deskripsi,
-        ];
+        $data = $request->only(['judul', 'deskripsi']);
 
         if ($request->hasFile('foto')) {
             if ($galeri->foto) {
@@ -71,12 +79,12 @@ class galeriController extends Controller
 
         $galeri->update($data);
 
-        return redirect()->route('galeri.index')->with('success', 'Data galeri berhasil diperbarui.');
+        return redirect()->route('galeri.index')->with('success', 'Galeri berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        $galeri = galery::findOrFail($id);
+        $galeri = galery::where('id_galeri', $id)->firstOrFail();
 
         if ($galeri->foto) {
             $oldPath = str_replace('public/', '', $galeri->foto);
@@ -87,6 +95,6 @@ class galeriController extends Controller
 
         $galeri->delete();
 
-        return redirect()->route('galeri.index')->with('success', 'Foto galeri berhasil dihapus.');
+        return redirect()->route('galeri.index')->with('success', 'Galeri berhasil dihapus.');
     }
 }

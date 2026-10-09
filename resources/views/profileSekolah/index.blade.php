@@ -7,12 +7,12 @@
         Profil Sekolah - {{ $profileSekolah->nama_sekolah ?? 'SMK YPC TASIKMALAYA' }}
     </h4>
 
-    {{-- <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-2">
         <div class="bg-secondary rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
             <i class="fa-solid fa-user"></i>
         </div>
         <span class="fw-bold text-dark">{{ Auth::user()->username ?? Auth::user()->name ?? 'admin' }}</span>
-    </div> --}}
+    </div>
 </div>
 
 <div class="px-4 pb-4">
@@ -45,7 +45,6 @@
                     </div>
 
                     <h4 class="fw-bold text-dark mb-1">{{ $profileSekolah->nama_sekolah ?? 'SMK YPC TASIKMALAYA' }}</h4>
-                    <p class="text-secondary small mb-4">Sekolah Menengah Kejuruan | Pondok Pesantren<br>Kab. Tasikmalaya, Jawa Barat</p>
 
                     <div class="text-center mb-4">
                         <div class="mb-3">
@@ -151,19 +150,15 @@
                 </div>
 
                 <div class="mt-4 pt-3 border-top text-end">
-                    @if(isset($profileSekolah) && ($profileSekolah->id || $profileSekolah->id_profile_sekolah))
-                        <a href="{{ route('profileSekolah.edit', $profileSekolah->id ?? $profileSekolah->id_profile_sekolah) }}" 
-                           class="btn text-white px-4 py-2.5 fw-bold shadow-sm" 
-                           style="background-color: #0d233a; border-radius: 8px;">
+                    <a href="{{ route('profileSekolah.edit') }}" 
+                       class="btn text-white px-4 py-2.5 fw-bold shadow-sm" 
+                       style="background-color: #0d233a; border-radius: 8px;">
+                        @if(isset($profileSekolah) && $profileSekolah->id_profil)
                             <i class="fa-solid fa-pen-to-square me-2"></i>Edit Data Profil
-                        </a>
-                    @else
-                        <a href="{{ route('profileSekolah.create') }}" 
-                           class="btn text-white px-4 py-2.5 fw-bold shadow-sm" 
-                           style="background-color: #0d233a; border-radius: 8px;">
+                        @else
                             <i class="fa-solid fa-plus me-2"></i>Isi Data Profil
-                        </a>
-                    @endif
+                        @endif
+                    </a>
                 </div>
 
             </div>

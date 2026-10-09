@@ -40,8 +40,8 @@
                         <th scope="col" class="py-3" style="width: 5%;">No</th>
                         <th scope="col" class="py-3" style="width: 15%;">Gambar</th>
                         <th scope="col" class="py-3" style="width: 30%;">Judul Berita</th>
-                        <th scope="col" class="py-3" style="width: 30%;">Isi Berita</th>
-                        <th scope="col" class="py-3 text-center" style="width: 20%;">Aksi</th>
+                        <th scope="col" class="py-3" style="width: 25%;">Isi Berita</th>
+                        <th scope="col" class="py-3 text-center" style="width: 25%;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +50,6 @@
                             <td class="fw-semibold text-secondary">{{ $beritas->firstItem() + $key }}</td>
                             <td>
                                 @if($item->gambar)
-                                    <!-- Menampilkan foto dengan penanganan path public/ agar muncul di browser -->
                                     <img src="{{ asset('storage/' . str_replace('public/', '', $item->gambar)) }}" 
                                          alt="Gambar Berita" 
                                          class="rounded border shadow-sm" 
@@ -70,9 +69,14 @@
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1">
+                                    <a href="{{ route('berita.detail', $item->id_berita ?? $item->id) }}" class="btn btn-sm btn-info text-white px-2.5 py-1.5" style="border-radius: 6px;" title="Lihat Detail">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+
                                     <a href="{{ route('berita.edit', $item->id_berita ?? $item->id) }}" class="btn btn-sm btn-warning text-white px-2.5 py-1.5" style="border-radius: 6px;" title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
+
                                     <form action="{{ route('berita.destroy', $item->id_berita ?? $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus berita ini?')">
                                         @csrf
                                         @method('DELETE')

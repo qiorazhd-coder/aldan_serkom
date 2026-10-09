@@ -14,8 +14,8 @@ class guruController extends Controller
 
         $guru = Guru::when($search, function ($query, $search) {
             return $query->where('nama_guru', 'like', "%{$search}%")
-                         ->orWhere('nip', 'like', "%{$search}%")
-                         ->orWhere('mapel', 'like', "%{$search}%");
+                ->orWhere('nip', 'like', "%{$search}%")
+                ->orWhere('mapel', 'like', "%{$search}%");
         })->latest()->paginate(10);
 
         return view('guru.index', compact('guru', 'search'));
@@ -78,6 +78,17 @@ class guruController extends Controller
         $guru->update($data);
 
         return redirect()->route('guru.index')->with('success', 'Data guru berhasil diperbarui.');
+    }
+
+    public function show($id)
+    {
+        $guru = guru::findOrFail($id);
+        return view('guru.detail', compact('guru'));
+    }
+
+    public function showDetail($id)
+    {
+        return $this->show($id);
     }
 
     public function destroy($id)

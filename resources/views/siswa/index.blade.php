@@ -2,7 +2,6 @@
 
 @section('content')
 
-<!-- Topbar Header -->
 <div class="bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between mb-4 shadow-sm" style="height: 70px;">
     <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.25rem;">
         Data Siswa
@@ -25,10 +24,9 @@
 
     <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 16px; background: #ffffff;">
         
-        <!-- Bar Pencarian -->
         <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
             <form action="{{ route('siswa.index') }}" method="GET" class="d-flex gap-2 w-100" style="max-width: 400px;">
-                <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari nama, NISN, atau kelas..." value="{{ $search ?? '' }}" style="border-radius: 6px;">
+                <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari nama atau NISN siswa..." value="{{ $search ?? '' }}" style="border-radius: 6px;">
                 <button type="submit" class="btn btn-sm text-white px-3" style="background-color: #0d233a; border-radius: 6px;">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -41,13 +39,11 @@
                     <thead style="background-color: #0d233a; color: #ffffff;">
                         <tr>
                             <th class="py-3 px-4 text-center" style="width: 60px;">No</th>
-                            <th class="py-3 px-3" style="width: 140px;">NISN</th>
-                            <th class="py-3 px-3">Nama Siswa</th>
-                            <th class="py-3 px-3" style="width: 120px;">Kelas</th>
-                            <th class="py-3 px-3">Jurusan</th>
-                            <th class="py-3 px-3 text-center" style="width: 130px;">L/P</th>
-                            <th class="py-3 px-3">Alamat</th>
-                            <th class="py-3 px-4 text-center" style="width: 180px;">Aksi</th>
+                            <th class="py-3 px-3" style="width: 180px;">NISN</th>
+                            <th class="py-3 px-3">Nama Lengkap Siswa</th>
+                            <th class="py-3 px-3" style="width: 150px;">Jenis Kelamin</th>
+                            <th class="py-3 px-3" style="width: 130px;">Tahun Masuk</th>
+                            <th class="py-3 px-4 text-center" style="width: 250px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,31 +53,27 @@
                                     {{ $siswa->firstItem() + $index }}
                                 </td>
                                 <td class="px-3 fw-semibold text-dark">
-                                    {{ $item->nisn }}
+                                    {{ $item->nisn ?? '-' }}
                                 </td>
                                 <td class="px-3 fw-bold text-dark">
-                                    {{ $item->nama }}
-                                </td>
-                                <td class="px-3">
-                                    <span class="badge bg-secondary px-2.5 py-1.5" style="border-radius: 6px;">
-                                        {{ $item->kelas }}
-                                    </span>
+                                    {{ $item->nama_siswa }}
                                 </td>
                                 <td class="px-3 text-secondary">
-                                    {{ $item->jurusan }}
+                                    {{ $item->jenis_kelamin }}
                                 </td>
-                                <td class="text-center px-3">
-                                    @if($item->jenis_kelamin == 'L')
-                                        <span class="badge bg-primary px-2 py-1">Laki-laki</span>
-                                    @else
-                                        <span class="badge bg-danger px-2 py-1">Perempuan</span>
-                                    @endif
-                                </td>
-                                <td class="px-3 text-secondary small">
-                                    {{ $item->alamat ?? '-' }}
+                                <td class="px-3 text-secondary">
+                                    {{ $item->tahun_masuk }}
                                 </td>
                                 <td class="text-center px-4">
                                     <div class="d-flex justify-content-center gap-2">
+                                        <!-- Tombol Detail -->
+                                        <a href="{{ route('siswa.detail', $item->id_siswa) }}" 
+                                           class="btn btn-sm btn-outline-info fw-semibold px-2.5 py-1.5" 
+                                           style="border-radius: 6px;" 
+                                           title="Lihat Detail">
+                                            <i class="fa-solid fa-eye me-1"></i> Detail
+                                        </a>
+
                                         <a href="{{ route('siswa.edit', $item->id_siswa) }}" 
                                            class="btn btn-sm btn-outline-warning fw-semibold px-2.5 py-1.5" 
                                            style="border-radius: 6px;" 
@@ -95,7 +87,7 @@
                                             <button type="submit" 
                                                     class="btn btn-sm btn-outline-danger fw-semibold px-2.5 py-1.5" 
                                                     style="border-radius: 6px;"
-                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')" 
+                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?')" 
                                                     title="Hapus Data">
                                                 <i class="fa-solid fa-trash-can me-1"></i> Hapus
                                             </button>
@@ -105,8 +97,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center py-5 text-muted">
-                                    <i class="fa-solid fa-graduation-cap fa-3x mb-3 d-block opacity-50"></i>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-user-graduate fa-3x mb-3 d-block opacity-50"></i>
                                     <span class="fw-bold d-block fs-6">Belum Ada Data Siswa</span>
                                     <small>Silakan klik tombol "Tambah Siswa" untuk memasukkan data.</small>
                                 </td>
