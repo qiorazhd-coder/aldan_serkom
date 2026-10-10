@@ -11,8 +11,8 @@
     </a>
 </div>
 
-<div class="px-4 pb-5">
-    <div class="card border-0 shadow-sm p-4 p-md-5 mx-auto" style="border-radius: 16px; background: #ffffff; max-width: 700px;">
+<div class="container-fluid px-4 pb-5">
+    <div class="card border-0 shadow-sm p-4 p-md-5 w-100" style="border-radius: 16px; background: #ffffff;">
         
         @if ($errors->any())
             <div class="alert alert-danger border-0 shadow-sm mb-4" style="border-radius: 10px;">

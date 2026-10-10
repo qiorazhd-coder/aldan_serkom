@@ -11,61 +11,57 @@
     </a>
 </div>
 
-<div class="px-4 pb-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm" style="border-radius: 16px; background: #ffffff;">
-                <div class="card-body p-4 p-md-5">
-                    
-                    <form action="{{ route('siswa.store') }}" method="POST">
-                        @csrf
+<div class="container-fluid px-4 pb-5">
+    <div class="card border-0 shadow-sm w-100" style="border-radius: 16px; background: #ffffff;">
+        <div class="card-body p-4 p-md-5">
+            
+            <form action="{{ route('siswa.store') }}" method="POST">
+                @csrf
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold text-dark">NISN</label>
-                            <input type="text" name="nisn" class="form-control @error('nisn') is-invalid @enderror" value="{{ old('nisn') }}" placeholder="Masukkan NISN..." required style="border-radius: 8px;">
-                            @error('nisn')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold text-dark">Nama Lengkap Siswa</label>
-                            <input type="text" name="nama_siswa" class="form-control @error('nama_siswa') is-invalid @enderror" value="{{ old('nama_siswa') }}" placeholder="Masukkan nama lengkap..." required style="border-radius: 8px;">
-                            @error('nama_siswa')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold text-dark">Jenis Kelamin</label>
-                            <select name="jenis_kelamin" class="form-select @error('jenis_kelamin') is-invalid @enderror" required style="border-radius: 8px;">
-                                <option value="" selected disabled>-- Pilih Jenis Kelamin --</option>
-                                <option value="Laki-Laki" {{ old('jenis_kelamin') == 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
-                                <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
-                            </select>
-                            @error('jenis_kelamin')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-dark">Tahun Masuk</label>
-                            <input type="number" name="tahun_masuk" class="form-control @error('tahun_masuk') is-invalid @enderror" value="{{ old('tahun_masuk', date('Y')) }}" placeholder="Contoh: 2026" required style="border-radius: 8px;">
-                            @error('tahun_masuk')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="d-flex justify-content-end gap-2">
-                            <a href="{{ route('siswa.index') }}" class="btn btn-light px-4 py-2 fw-semibold" style="border-radius: 8px;">Batal</a>
-                            <button type="submit" class="btn text-white px-4 py-2 fw-semibold" style="background-color: #0d233a; border-radius: 8px;">
-                                <i class="fa-solid fa-save me-1"></i> Simpan Data
-                            </button>
-                        </div>
-                    </form>
-
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-dark">NISN</label>
+                    <input type="text" name="nisn" class="form-control @error('nisn') is-invalid @enderror" value="{{ old('nisn') }}" placeholder="Masukkan NISN..." required style="border-radius: 8px;">
+                    @error('nisn')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
-            </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-dark">Nama Lengkap Siswa</label>
+                    <input type="text" name="nama_siswa" class="form-control @error('nama_siswa') is-invalid @enderror" value="{{ old('nama_siswa') }}" placeholder="Masukkan nama lengkap..." required style="border-radius: 8px;">
+                    @error('nama_siswa')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-dark">Jenis Kelamin</label>
+                    <select name="jenis_kelamin" class="form-select @error('jenis_kelamin') is-invalid @enderror" required style="border-radius: 8px;">
+                        <option value="" selected disabled>-- Pilih Jenis Kelamin --</option>
+                        <option value="Laki-Laki" {{ old('jenis_kelamin') == 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+                        <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                    @error('jenis_kelamin')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-dark">Tahun Masuk</label>
+                    <input type="number" name="tahun_masuk" class="form-control @error('tahun_masuk') is-invalid @enderror" value="{{ old('tahun_masuk', date('Y')) }}" placeholder="Contoh: 2026" required style="border-radius: 8px;">
+                    @error('tahun_masuk')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ route('siswa.index') }}" class="btn btn-light px-4 py-2 fw-semibold" style="border-radius: 8px;">Batal</a>
+                    <button type="submit" class="btn text-white px-4 py-2 fw-semibold" style="background-color: #0d233a; border-radius: 8px;">
+                        <i class="fa-solid fa-save me-1"></i> Simpan Data
+                    </button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

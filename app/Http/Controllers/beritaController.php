@@ -6,6 +6,7 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class beritaController extends Controller
 {
@@ -52,16 +53,42 @@ class beritaController extends Controller
         return view('berita.detail', compact('berita'));
     }
 
-    public function showDetail($id)
-    {
-        $berita = berita::where('id_berita', $id)->firstOrFail();
+    public function showDetail($identifier = null)
+{
+    // Jika URL diakses tanpa slug / kosong
+    if (empty($identifier)) {
         if (\Illuminate\Support\Facades\Auth::check()) {
-            return view('berita.detail', compact('berita'));
+            return redirect()->route('berita.index')->with('error', 'Data berita tidak ditemukan.');
         }
-
-        return view('landing.berita-detail', compact('berita'));
+        return redirect()->to('/');
     }
 
+    // Cek berdasarkan id_berita
+    $berita = berita::where('id_berita', $identifier)->first();
+
+    // Jika tidak ketemu, cari berdasarkan slug dari judul
+    if (!$berita) {
+        $berita = berita::all()->first(function ($item) use ($identifier) {
+            return \Illuminate\Support\Str::slug($item->judul) === $identifier;
+        });
+    }
+
+    // Jika data berita tidak ditemukan di database
+    if (!$berita) {
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            return redirect()->route('berita.index')->with('error', 'Data berita tidak ditemukan.');
+        }
+        return redirect()->to('/');
+    }
+
+    // Jika admin/operator yang login, gunakan layout admin (dengan sidebar)
+    if (\Illuminate\Support\Facades\Auth::check()) {
+        return view('berita.detail', compact('berita'));
+    }
+
+    // Jika pengunjung umum dari landing page
+    return view('landing.berita-detail', compact('berita'));
+}
     public function edit($id)
     {
         $berita = Berita::findOrFail($id);

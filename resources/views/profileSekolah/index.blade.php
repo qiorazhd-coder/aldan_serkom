@@ -134,7 +134,7 @@
                         <div class="p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center mt-1" style="background-color: #0d233a; width: 42px; height: 42px;">
                             <i class="fa-solid fa-list fa-lg"></i>
                         </div>
-                        <div class="col-4 fw-bold text-dark fs-6 mt-2">Deskripsi</div>
+                        <div class="col-4 fw-bold text-dark fs-6 mt-2">Sambutan Pimpinan</div>
                         <div class="col-7 text-dark fs-6 mt-2">
                             {!! isset($profileSekolah->deskripsi) ? nl2br(e($profileSekolah->deskripsi)) : '<em class="text-muted">- Belum diisi -</em>' !!}
                         </div>

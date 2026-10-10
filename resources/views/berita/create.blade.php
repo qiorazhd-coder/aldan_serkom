@@ -1,51 +1,67 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between mb-4 shadow-sm" style="height: 70px;">
-    <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.25rem;">Tambah Berita Baru</h4>
-    <a href="{{ route('berita.index') }}" class="btn btn-outline-secondary px-3 py-1.5 fw-semibold" style="border-radius: 8px;">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-    </a>
-</div>
+{{-- MENGGUNAKAN container-fluid AGAR LEBAR PENUH HAMPIR MEMENUHI LAYAR --}}
+<div class="container-fluid px-3 px-md-4">
 
-<div class="px-4 pb-5">
-    <div class="card border-0 shadow-sm p-4 p-md-5 mx-auto" style="border-radius: 16px; background: #ffffff; max-width: 800px;">
-        
-        @if ($errors->any())
-            <div class="alert alert-danger border-0 shadow-sm mb-4">
-                <ul class="mb-0 ps-3 small">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0 text-dark">Tambah Berita Baru</h3>
+        <a href="{{ route('berita.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fas fa-arrow-left me-1"></i> Kembali
+        </a>
+    </div>
 
+    {{-- CARD FORM DENGAN LEBAR MAKSIMAL 100% DAN PADDING LUAS --}}
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 w-100">
         <form action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <div class="mb-3">
-                <label class="form-label fw-semibold text-dark">Judul Berita <span class="text-danger">*</span></label>
-                <input type="text" name="judul" class="form-control py-2.5" value="{{ old('judul') }}" required style="border-radius: 8px; background-color: #f8fafc;">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold text-dark">Isi Berita <span class="text-danger">*</span></label>
-                <textarea name="isi" class="form-control py-2.5" rows="6" required style="border-radius: 8px; background-color: #f8fafc;">{{ old('isi') }}</textarea>
-            </div>
-
+            {{-- Judul Berita --}}
             <div class="mb-4">
-                <label class="form-label fw-semibold text-dark">Gambar Berita (Opsional)</label>
-                <input type="file" name="gambar" class="form-control py-2" accept="image/*" style="border-radius: 8px; background-color: #f8fafc;">
+                <label for="judul" class="form-label fw-semibold text-dark fs-5">Judul Berita <span class="text-danger">*</span></label>
+                <input type="text" name="judul" id="judul" 
+                       class="form-control form-control-lg @error('judul') is-invalid @enderror" 
+                       placeholder="Masukkan judul berita..." value="{{ old('judul') }}" required>
+                @error('judul')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
-            <div class="pt-3 border-top text-end d-flex justify-content-between align-items-center">
-                <a href="{{ route('berita.index') }}" class="btn btn-light border px-4 py-2 fw-semibold text-secondary">Batal</a>
-                <button type="submit" class="btn text-white px-4 py-2.5 fw-bold shadow-sm" style="background-color: #0d233a; border-radius: 8px;">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>Simpan Berita
-                </button>
+            {{-- Isi Berita (Textarea dibuat lebih tinggi agar leluasa) --}}
+            <div class="mb-4">
+                <label for="isi" class="form-label fw-semibold text-dark fs-5">Isi Berita <span class="text-danger">*</span></label>
+                <textarea name="isi" id="isi" rows="12" 
+                          class="form-control form-control-lg @error('isi') is-invalid @enderror" 
+                          placeholder="Tulis isi berita lengkap di sini..." required>{{ old('isi') }}</textarea>
+                @error('isi')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
+
+            {{-- Baris Gambar & Tombol --}}
+            <div class="row align-items-center g-4 pt-2">
+                <div class="col-12 col-lg-6">
+                    <label for="gambar" class="form-label fw-semibold text-dark">Gambar Berita <span class="text-muted small">(Opsional)</span></label>
+                    <input type="file" name="gambar" id="gambar" 
+                           class="form-control form-control-lg @error('gambar') is-invalid @enderror" accept="image/*">
+                    <small class="text-muted d-block mt-1">Format yang didukung: JPG, PNG, JPEG. Maksimal 2MB.</small>
+                    @error('gambar')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-12 col-lg-6 text-lg-end mt-4 mt-lg-0">
+                    <button type="reset" class="btn btn-lg btn-outline-secondary px-4 rounded-pill me-2">
+                        <i class="fas fa-undo me-1"></i> Batal
+                    </button>
+                    <button type="submit" class="btn btn-lg btn-dark px-5 rounded-pill shadow-sm">
+                        <i class="fas fa-save me-1"></i> Simpan Berita
+                    </button>
+                </div>
+            </div>
+
         </form>
     </div>
+
 </div>
 @endsection

@@ -10,29 +10,33 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
+            overflow-x: hidden;
         }
         #sidebar {
-            min-width: 260px;
-            max-width: 260px;
+            min-width: 280px;
+            max-width: 280px;
             background: #0d233a;
             color: #fff;
             min-height: 100vh;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             position: fixed;
             top: 0;
-            left: 0;
-            z-index: 1000;
+            left: -280px; /* Sembunyikan secara default di HP */
+            z-index: 1050;
+        }
+        #sidebar.active {
+            left: 0; /* Munculkan saat aktif */
         }
         #sidebar .sidebar-header {
-            padding: 20px;
+            padding: 22px 20px;
             background: #09192a;
         }
         #sidebar ul.components {
             padding: 20px 0;
         }
         #sidebar ul li a {
-            padding: 12px 20px;
-            font-size: 0.95rem;
+            padding: 14px 22px;
+            font-size: 1rem;
             display: block;
             color: #cbd5e1;
             text-decoration: none;
@@ -45,12 +49,33 @@
             border-left: 4px solid #f59e0b;
         }
         #content {
-            width: calc(100% - 260px);
-            margin-left: 260px;
+            width: 100%;
+            margin-left: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: all 0.3s ease;
         }
+        
+        /* Tampilan di Laptop / Layar Besar */
+        @media (min-width: 992px) {
+            #sidebar {
+                left: 0; /* Selalu tampil di laptop */
+            }
+            #sidebar.active {
+                left: -280px; 
+            }
+            #content {
+                width: calc(100% - 280px);
+                margin-left: 280px;
+            }
+            #sidebar.active + #content,
+            #content.expanded {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+
         .navbar-top {
             background: #ffffff;
             height: 70px;
@@ -60,23 +85,48 @@
             flex: 1;
             padding: 20px;
         }
+        
+        /* Overlay gelap saat sidebar muncul di HP */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            z-index: 1040;
+            display: none;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
 
-    <div class="wrapper d-flex">
+    <!-- Overlay untuk HP -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="wrapper d-flex flex-column flex-lg-row">
         
+        <!-- SIDEBAR -->
         <nav id="sidebar">
-            <div class="sidebar-header d-flex align-items-center gap-2">
-                @php
-                    $logoApp = $globalProfile->logo ?? null;
-                @endphp
-                @if($logoApp)
-                    <img src="{{ asset('storage/' . str_replace('public/', '', $logoApp)) }}" alt="Logo" style="width: 35px; height: 35px; object-fit: contain;">
-                @else
-                    <i class="fa-solid fa-graduation-cap text-warning fs-4"></i>
-                @endif
-                <h5 class="fw-bold mb-0 text-white" style="font-size: 1.1rem;">{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</h5>
+            <div class="sidebar-header d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    @php
+                        $logoApp = $globalProfile->logo ?? null;
+                    @endphp
+                    @if($logoApp)
+                        <img src="{{ asset('storage/' . str_replace('public/', '', $logoApp)) }}" alt="Logo" style="width: 35px; height: 35px; object-fit: contain;">
+                    @else
+                        <i class="fa-solid fa-graduation-cap text-warning fs-4"></i>
+                    @endif
+                    <h5 class="fw-bold mb-0 text-white" style="font-size: 1.1rem;">{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</h5>
+                </div>
+                <!-- Tombol Close Sidebar di HP -->
+                <button class="btn text-white d-lg-none" id="sidebarCloseBtn">
+                    <i class="fa-solid fa-xmark fs-5"></i>
+                </button>
             </div>
 
             <ul class="list-unstyled components">
@@ -137,8 +187,14 @@
 
         <div id="content">
             
-            <nav class="navbar navbar-expand navbar-top px-4 d-flex justify-content-end align-items-center">
-                <div class="dropdown">
+            <!-- TOP NAVBAR -->
+            <nav class="navbar navbar-expand navbar-top px-4 d-flex justify-content-between align-items-center">
+                <!-- Tombol Hamburger (Hanya tampil di HP/Tablet, otomatis sembunyi di Laptop berkat d-lg-none) -->
+                <button class="btn btn-light border shadow-sm d-lg-none" id="sidebarToggle" type="button">
+                    <i class="fa-solid fa-bars text-dark"></i>
+                </button>
+
+                <div class="dropdown ms-auto">
                     <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark gap-2 p-1 rounded-pill pe-3 bg-light border" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="rounded-circle bg-warning text-dark d-inline-flex align-items-center justify-content-center shadow-sm fw-bold" style="width: 38px; height: 38px; font-size: 0.9rem;">
                             {{ Auth::check() ? strtoupper(substr(Auth::user()->username, 0, 1)) : 'A' }}
@@ -186,6 +242,35 @@
         </div>
     </div>
 
+    <!-- Script Bootstrap & Toggle Hamburger -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+                sidebarOverlay.classList.toggle('active');
+            });
+        }
+
+        if (sidebarCloseBtn) {
+            sidebarCloseBtn.addEventListener('click', function () {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            });
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            });
+        }
+    </script>
 </body>
 </html>
