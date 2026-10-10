@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }} - Portal Resmi Sekolah</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         html {
@@ -347,7 +345,7 @@
                                     </p>
                                     <p class="text-secondary small mb-3 flex-grow-1">{{ Str::limit(strip_tags($item->deskripsi), 80) }}</p>
                                     <div class="mt-auto">
-                                        <a href="{{ route('ekstrakulikuler.detail', $item->id_ekstrakulikuler) }}" class="btn btn-sm btn-outline-dark px-3 py-2 rounded-pill fw-semibold w-100">
+                                        <a href="{{ route('landing.ekstrakulikuler.detail', $item->id_ekstrakulikuler) }}" class="btn btn-sm btn-outline-dark px-3 py-2 rounded-pill fw-semibold w-100">
                                             Selengkapnya <i class="fa-solid fa-arrow-right ms-1"></i>
                                         </a>
                                     </div>
@@ -362,13 +360,14 @@
                 @endisset
             </div>
             <div class="text-center mt-5">
-                <a href="{{ route('ekstrakulikuler.index') }}" class="btn btn-dark rounded-pill px-4 py-2 fw-semibold">
+                <a href="{{ route('landing.ekstrakulikuler') }}" class="btn btn-dark rounded-pill px-4 py-2 fw-semibold">
                     Lihat Semua Ekstrakurikuler <i class="fa-solid fa-arrow-right ms-1"></i>
                 </a>
             </div>
         </div>
     </section>
 
+    <!-- SECTION GALERI (Dukung Foto & Video Lokal) -->
     <section id="galeri" class="full-screen-section bg-white">
         <div class="container">
             <div class="text-center mb-5">
@@ -379,16 +378,26 @@
                 @forelse($galeri as $foto)
                     <div class="col-md-4">
                         <div class="card card-custom h-100 overflow-hidden d-flex flex-column">
-                            @php
-                                $fotoGaleri = $foto->gambar ?? $foto->foto ?? null;
-                            @endphp
-                            @if($fotoGaleri)
-                                <img src="{{ asset('storage/' . str_replace('public/', '', $fotoGaleri)) }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Galeri">
-                            @else
-                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 220px;">
-                                    <i class="fa-solid fa-images fa-3x"></i>
+                            @if(!empty($foto->video))
+                                <div class="ratio ratio-16x9">
+                                    <video controls class="w-100 h-100" style="object-fit: cover;">
+                                        <source src="{{ asset('storage/' . str_replace('public/', '', $foto->video)) }}" type="video/mp4">
+                                        Browser Anda tidak mendukung pemutaran video.
+                                    </video>
                                 </div>
+                            @else
+                                @php
+                                    $fotoGaleri = $foto->foto ?? $foto->gambar ?? null;
+                                @endphp
+                                @if($fotoGaleri)
+                                    <img src="{{ asset('storage/' . str_replace('public/', '', $fotoGaleri)) }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Galeri">
+                                @else
+                                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 220px;">
+                                        <i class="fa-solid fa-images fa-3x"></i>
+                                    </div>
+                                @endif
                             @endif
+
                             <div class="card-body p-4 d-flex flex-column flex-grow-1">
                                 <small class="text-muted d-block mb-2"><i class="fa-regular fa-calendar me-1"></i>{{ $foto->created_at ? \Carbon\Carbon::parse($foto->created_at)->format('d M Y') : '-' }}</small>
                                 <h5 class="fw-bold text-dark mb-2">{{ $foto->judul }}</h5>
@@ -403,7 +412,7 @@
                     </div>
                 @empty
                     <div class="col-12 text-center py-4 text-muted">
-                        <p>Belum ada foto galeri.</p>
+                        <p>Belum ada galeri kegiatan.</p>
                     </div>
                 @endforelse
             </div>

@@ -15,6 +15,8 @@ class galery extends Model
     protected $fillable = [
         'judul',
         'foto',
+        'video', // Tambahkan kolom video / youtube link
         'deskripsi',
     ];
+
 }

@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ekstrakulikuler;
+use App\Models\ekstrakulikuler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ekstrakulikulerController extends Controller
 {
-    // ================= ADMIN CRUD =================
+    public function publicIndex()
+    {
+        $ekstrakulikulers = ekstrakulikuler::latest()->get();
+        return view('landing.ekstrakulikuler', compact('ekstrakulikulers'));
+    }
+
+    public function publicDetail($id)
+    {
+        $ekstrakulikuler = ekstrakulikuler::where('id_ekstrakulikuler', $id)->firstOrFail();
+        return view('landing.ekstrakulikuler-detail', compact('ekstrakulikuler'));
+    }
+
     public function index()
     {
-        $ekstrakulikulers = Ekstrakulikuler::all();
+        $ekstrakulikulers = ekstrakulikuler::latest()->paginate(10);
         return view('ekstrakulikuler.index', compact('ekstrakulikulers'));
     }
 
@@ -23,46 +34,46 @@ class ekstrakulikulerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_ekskul'    => 'required|string|max:40',
-            'pembina'        => 'required|string|max:40',
-            'jadwal_latihan' => 'required|string|max:40',
-            'deskripsi'      => 'nullable|string',
+            'nama_ekskul'    => 'required|string|max:255',
+            'pembina'        => 'nullable|string|max:255',
+            'jadwal_latihan' => 'nullable|string|max:255',
             'gambar'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'deskripsi'      => 'nullable|string',
         ]);
 
         $data = $request->only(['nama_ekskul', 'pembina', 'jadwal_latihan', 'deskripsi']);
 
         if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('ekskul', 'public');
+            $data['gambar'] = $request->file('gambar')->store('ekstrakulikuler', 'public');
         }
 
-        Ekstrakulikuler::create($data);
+        ekstrakulikuler::create($data);
 
-        return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil ditambahkan.');
+        return redirect()->route('ekstrakulikuler.index')->with('success', 'Ekstrakurikuler berhasil ditambahkan.');
     }
 
-    public function show($id)
+    public function showDetail($id)
     {
-        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
-        return view('ekstrakulikuler.show', compact('ekstrakulikuler'));
+        $ekstrakulikuler = ekstrakulikuler::where('id_ekstrakulikuler', $id)->firstOrFail();
+        return view('ekstrakulikuler.detail', compact('ekstrakulikuler'));
     }
 
     public function edit($id)
     {
-        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+        $ekstrakulikuler = ekstrakulikuler::where('id_ekstrakulikuler', $id)->firstOrFail();
         return view('ekstrakulikuler.edit', compact('ekstrakulikuler'));
     }
 
     public function update(Request $request, $id)
     {
-        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+        $ekstrakulikuler = ekstrakulikuler::where('id_ekstrakulikuler', $id)->firstOrFail();
 
         $request->validate([
-            'nama_ekskul'    => 'required|string|max:40',
-            'pembina'        => 'required|string|max:40',
-            'jadwal_latihan' => 'required|string|max:40',
-            'deskripsi'      => 'nullable|string',
+            'nama_ekskul'    => 'required|string|max:255',
+            'pembina'        => 'nullable|string|max:255',
+            'jadwal_latihan' => 'nullable|string|max:255',
             'gambar'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'deskripsi'      => 'nullable|string',
         ]);
 
         $data = $request->only(['nama_ekskul', 'pembina', 'jadwal_latihan', 'deskripsi']);
@@ -74,23 +85,17 @@ class ekstrakulikulerController extends Controller
                     Storage::disk('public')->delete($oldPath);
                 }
             }
-            $data['gambar'] = $request->file('gambar')->store('ekskul', 'public');
+            $data['gambar'] = $request->file('gambar')->store('ekstrakulikuler', 'public');
         }
 
         $ekstrakulikuler->update($data);
 
-        return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil diperbarui.');
-    }
-
-    public function showDetail($id)
-    {
-        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
-        return view('ekstrakulikuler.detail', compact('ekstrakulikuler'));
+        return redirect()->route('ekstrakulikuler.index')->with('success', 'Ekstrakurikuler berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
+        $ekstrakulikuler = ekstrakulikuler::where('id_ekstrakulikuler', $id)->firstOrFail();
 
         if ($ekstrakulikuler->gambar) {
             $oldPath = str_replace('public/', '', $ekstrakulikuler->gambar);
@@ -101,19 +106,6 @@ class ekstrakulikulerController extends Controller
 
         $ekstrakulikuler->delete();
 
-        return redirect()->route('ekstrakulikuler.index')->with('success', 'Data berhasil dihapus.');
-    }
-
-    // ================= PUBLIK / LANDING PAGE =================
-    public function publicIndex()
-    {
-        $ekstrakulikulers = Ekstrakulikuler::latest()->get();
-        return view('landing.ekstrakulikuler', compact('ekstrakulikulers'));
-    }
-
-    public function publicDetail($id)
-    {
-        $ekstrakulikuler = Ekstrakulikuler::findOrFail($id);
-        return view('landing.ekstrakulikuler-detail', compact('ekstrakulikuler'));
+        return redirect()->route('ekstrakulikuler.index')->with('success', 'Ekstrakurikuler berhasil dihapus.');
     }
 }

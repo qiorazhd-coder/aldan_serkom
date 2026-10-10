@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $ekstrakulikuler->nama_ekskul }} - {{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA' }}</title>
+    <title>{{ $galeri->judul }} - {{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA' }}</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome Icons -->
@@ -38,35 +38,43 @@
                 <div class="bg-white p-4 p-md-5 rounded-4 shadow-sm">
                     
                     <div class="mb-4">
-                        <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-semibold mb-2 d-inline-block">Ekstrakurikuler</span>
-                        <h2 class="fw-bold text-dark mb-3">{{ $ekstrakulikuler->nama_ekskul }}</h2>
+                        <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-semibold mb-2 d-inline-block">Galeri Kegiatan</span>
+                        <h2 class="fw-bold text-dark mb-2">{{ $galeri->judul }}</h2>
                     </div>
 
-                    @if($ekstrakulikuler->gambar)
-                        <div class="mb-4 text-center">
-                            <img src="{{ asset('storage/' . str_replace('public/', '', $ekstrakulikuler->gambar)) }}" alt="{{ $ekstrakulikuler->nama_ekskul }}" class="img-fluid rounded-4 shadow-sm" style="max-height: 400px; width: 100%; object-fit: cover;">
-                        </div>
-                    @endif
+                    <!-- TAMPILAN MEDIA (FOTO ATAU VIDEO) -->
+                    <div class="mb-4 rounded overflow-hidden shadow-sm border bg-light text-center">
+                        @if(!empty($galeri->video))
+                            <div class="ratio ratio-16x9">
+                                <video controls class="w-100 h-100" style="object-fit: cover;">
+                                    <source src="{{ asset('storage/' . str_replace('public/', '', $galeri->video)) }}" type="video/mp4">
+                                    Browser Anda tidak mendukung pemutaran video.
+                                </video>
+                            </div>
+                        @else
+                            @php
+                                $fotoGaleri = $galeri->foto ?? $galeri->gambar ?? null;
+                            @endphp
+                            @if($fotoGaleri)
+                                <img src="{{ asset('storage/' . str_replace('public/', '', $fotoGaleri)) }}" alt="{{ $galeri->judul }}" class="img-fluid rounded-4 shadow-sm" style="max-height: 400px; width: 100%; object-fit: cover;">
+                            @else
+                                <div class="py-5 text-secondary">
+                                    <i class="fa-solid fa-image fa-3x mb-2"></i>
+                                    <p class="mb-0">Tidak ada media yang diunggah.</p>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
 
-                    <div class="row g-3 text-secondary mb-4">
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 border">
-                                <strong><i class="fa-solid fa-user-tie me-2 text-warning"></i>Pembina:</strong>
-                                <div class="text-dark fw-semibold mt-1">{{ $ekstrakulikuler->pembina ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 border">
-                                <strong><i class="fa-solid fa-calendar-days me-2 text-warning"></i>Jadwal Latihan:</strong>
-                                <div class="text-dark fw-semibold mt-1">{{ $ekstrakulikuler->jadwal_latihan ?? '-' }}</div>
-                            </div>
-                        </div>
+                    <div class="text-muted small mb-4">
+                        <i class="fa-regular fa-calendar me-1"></i> {{ $galeri->created_at ? \Carbon\Carbon::parse($galeri->created_at)->format('d M Y, H:i') : '-' }}
+                        <span class="ms-3"><i class="fa-regular fa-user me-1"></i> Admin Sekolah</span>
                     </div>
 
                     <div class="mb-5">
                         <h5 class="fw-bold text-dark mb-3">Deskripsi Kegiatan</h5>
                         <div class="text-secondary" style="line-height: 1.8; white-space: pre-line;">
-                            {!! $ekstrakulikuler->deskripsi ?? '<span class="text-muted fst-italic">Belum ada deskripsi.</span>' !!}
+                            {{ $galeri->deskripsi ?? 'Tidak ada deskripsi.' }}
                         </div>
                     </div>
 
@@ -83,6 +91,7 @@
         </div>
     </div>
 
+    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -10,8 +10,9 @@ return new class extends Migration
     {
         Schema::create('galeries', function (Blueprint $table) {
             $table->id('id_galeri');
-            $table->string('judul');
-            $table->string('foto');
+            $table->string('judul')->nullable();
+            $table->string('foto')->nullable();
+            $table->string('video')->nullable(); 
             $table->text('deskripsi')->nullable();
             $table->timestamps();
         });

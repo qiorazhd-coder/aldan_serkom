@@ -6,13 +6,6 @@
     <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.25rem;">
         Profil Sekolah - {{ $profileSekolah->nama_sekolah ?? 'SMK YPC TASIKMALAYA' }}
     </h4>
-
-    <div class="d-flex align-items-center gap-2">
-        <div class="bg-secondary rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-            <i class="fa-solid fa-user"></i>
-        </div>
-        <span class="fw-bold text-dark">{{ Auth::user()->username ?? Auth::user()->name ?? 'admin' }}</span>
-    </div>
 </div>
 
 <div class="px-4 pb-4">

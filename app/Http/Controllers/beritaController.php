@@ -54,7 +54,12 @@ class beritaController extends Controller
 
     public function showDetail($id)
     {
-        return $this->show($id);
+        $berita = berita::where('id_berita', $id)->firstOrFail();
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            return view('berita.detail', compact('berita'));
+        }
+
+        return view('landing.berita-detail', compact('berita'));
     }
 
     public function edit($id)

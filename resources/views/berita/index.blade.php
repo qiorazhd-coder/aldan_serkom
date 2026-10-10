@@ -10,7 +10,7 @@
 
 <div class="px-4 pb-5">
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert" style="border-radius: 10px;">
+        <div id="successAlert" class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert" style="border-radius: 10px;">
             <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -20,7 +20,7 @@
         
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div class="text-secondary small fw-semibold">
-                Showing {{ $beritas->firstItem() ?? 0 }} - {{ $beritas->lastItem() ?? 0 }} of {{ $beritas->total() ?? 0 }} entries
+                Showing {{ $beritas->firstItem() ?? 0 }} to {{ $beritas->lastItem() ?? 0 }} of {{ $beritas->total() ?? 0 }} entries
             </div>
 
             <div class="d-flex align-items-center gap-2">
@@ -69,19 +69,19 @@
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1">
-                                    <a href="{{ route('berita.detail', $item->id_berita ?? $item->id) }}" class="btn btn-sm btn-info text-white px-2.5 py-1.5" style="border-radius: 6px;" title="Lihat Detail">
+                                    <a href="{{ route('berita.detail', $item->id_berita ?? $item->id) }}" class="btn btn-sm btn-outline-info px-2 py-1" style="border-radius: 6px;" title="Lihat Detail">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
 
-                                    <a href="{{ route('berita.edit', $item->id_berita ?? $item->id) }}" class="btn btn-sm btn-warning text-white px-2.5 py-1.5" style="border-radius: 6px;" title="Edit">
+                                    <a href="{{ route('berita.edit', $item->id_berita ?? $item->id) }}" class="btn btn-sm btn-outline-warning px-2 py-1" style="border-radius: 6px;" title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
 
-                                    <form action="{{ route('berita.destroy', $item->id_berita ?? $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus berita ini?')">
+                                    <form action="{{ route('berita.destroy', $item->id_berita ?? $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger px-2.5 py-1.5" style="border-radius: 6px;" title="Hapus">
-                                            <i class="fa-solid fa-trash"></i>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger px-2 py-1" style="border-radius: 6px;" title="Hapus">
+                                            <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -110,4 +110,16 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let alertEl = document.getElementById('successAlert');
+        if (alertEl) {
+            setTimeout(function() {
+                let alert = new bootstrap.Alert(alertEl);
+                alert.close();
+            }, 3000);
+        }
+    });
+</script>
 @endsection

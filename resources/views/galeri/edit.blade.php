@@ -4,7 +4,7 @@
 
 <div class="bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between mb-4 shadow-sm" style="height: 70px;">
     <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.25rem;">
-        Edit Data Galeri
+        Edit Galeri
     </h4>
     <a href="{{ route('galeri.index') }}" class="btn btn-outline-secondary px-3 py-1.5 fw-semibold" style="border-radius: 8px;">
         <i class="fa-solid fa-arrow-left me-1"></i> Kembali
@@ -29,24 +29,40 @@
             @method('PUT')
 
             <div class="mb-3">
-                <label class="form-label fw-semibold text-dark">Judul Foto / Kegiatan <span class="text-danger">*</span></label>
-                <input type="text" name="judul" class="form-control py-2.5" value="{{ old('judul', $galeri->judul) }}" required style="border-radius: 8px; background-color: #f8fafc;">
-            </div>
-
-            <!-- Preview Foto -->
-            <div class="mb-3">
-                <label class="form-label fw-semibold text-dark d-block">Foto Saat Ini</label>
-                <div class="p-2 border rounded d-inline-block bg-light mb-2">
-                    <img src="{{ asset('storage/' . str_replace('public/', '', $galeri->foto)) }}?t={{ time() }}" 
-                         alt="Preview Foto" 
-                         style="max-width: 200px; max-height: 140px; object-fit: cover; border-radius: 6px;">
-                </div>
+                <label class="form-label fw-semibold text-dark">Judul Kegiatan <span class="text-danger">*</span></label>
+                <input type="text" name="judul" class="form-control py-2" value="{{ old('judul', $galeri->judul) }}" required style="border-radius: 8px; background-color: #f8fafc;">
             </div>
 
             <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Jenis Konten <span class="text-danger">*</span></label>
+                <select id="jenisKonten" class="form-select py-2" onchange="toggleJenisKonten()" style="border-radius: 8px; background-color: #f8fafc;">
+                    <option value="foto" {{ $galeri->video ? '' : 'selected' }}>Foto</option>
+                    <option value="video" {{ $galeri->video ? 'selected' : '' }}>Video (Unggah File MP4/WebM)</option>
+                </select>
+            </div>
+
+            <!-- Input Foto -->
+            <div class="mb-3 {{ $galeri->video ? 'd-none' : '' }}" id="wrapperFoto">
                 <label class="form-label fw-semibold text-dark">Ganti Foto (Opsional)</label>
+                @if($galeri->foto)
+                    <div class="mb-2">
+                        <img src="{{ asset('storage/' . str_replace('public/', '', $galeri->foto)) }}" class="rounded border" style="width: 120px; height: 80px; object-fit: cover;">
+                    </div>
+                @endif
                 <input type="file" name="foto" class="form-control py-2" accept="image/*" style="border-radius: 8px; background-color: #f8fafc;">
-                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah foto. Format: JPG, PNG, WEBP (Maks 2MB)</small>
+            </div>
+
+            <!-- Input Video Lokal -->
+            <div class="mb-3 {{ $galeri->video ? '' : 'd-none' }}" id="wrapperVideo">
+                <label class="form-label fw-semibold text-dark">Ganti File Video (Opsional)</label>
+                @if($galeri->video)
+                    <div class="mb-2">
+                        <video width="200" controls class="rounded border">
+                            <source src="{{ asset('storage/' . str_replace('public/', '', $galeri->video)) }}" type="video/mp4">
+                        </video>
+                    </div>
+                @endif
+                <input type="file" name="video" class="form-control py-2" accept="video/mp4,video/webm,video/ogg" style="border-radius: 8px; background-color: #f8fafc;">
             </div>
 
             <div class="mb-4">
@@ -59,12 +75,28 @@
                     Batal
                 </a>
                 <button type="submit" class="btn text-white px-4 py-2.5 fw-bold shadow-sm" style="background-color: #0d233a; border-radius: 8px;">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>Perbarui Data
+                    <i class="fa-solid fa-floppy-disk me-2"></i>Perbarui Galeri
                 </button>
             </div>
         </form>
 
     </div>
 </div>
+
+<script>
+    function toggleJenisKonten() {
+        let jenis = document.getElementById('jenisKonten').value;
+        let wrapperFoto = document.getElementById('wrapperFoto');
+        let wrapperVideo = document.getElementById('wrapperVideo');
+
+        if (jenis === 'video') {
+            wrapperFoto.classList.add('d-none');
+            wrapperVideo.classList.remove('d-none');
+        } else {
+            wrapperVideo.classList.add('d-none');
+            wrapperFoto.classList.remove('d-none');
+        }
+    }
+</script>
 
 @endsection

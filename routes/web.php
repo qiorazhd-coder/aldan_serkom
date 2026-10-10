@@ -16,20 +16,20 @@ use App\Http\Controllers\AuthController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
-// Rute Publik / Landing Page Ekstrakurikuler
-Route::get('/ekstrakulikuler', [ekstrakulikulerController::class, 'publicIndex'])->name('landing.ekstrakulikuler');
-Route::get('/ekstrakulikuler/{id}', [ekstrakulikulerController::class, 'publicDetail'])->name('landing.ekstrakulikuler.detail');
+Route::get('/daftar-ekstrakulikuler', [ekstrakulikulerController::class, 'publicIndex'])->name('landing.ekstrakulikuler');
+Route::get('/daftar-ekstrakulikuler/detail/{id}', [ekstrakulikulerController::class, 'publicDetail'])->name('landing.ekstrakulikuler.detail');
 
 Route::get('/berita/detail/{id}', [beritaController::class, 'showDetail'])->name('berita.detail');
 Route::get('/guru/detail/{id}', [guruController::class, 'showDetail'])->name('guru.detail');
 Route::get('/siswa/detail/{id}', [siswaController::class, 'showDetail'])->name('siswa.detail');
 Route::get('/ekstrakulikuler/detail/{id}', [ekstrakulikulerController::class, 'showDetail'])->name('ekstrakulikuler.detail');
+Route::get('/guru/detail/{id}', [guruController::class, 'showDetail'])->name('guru.detail');
 Route::get('/galeri/detail/{id}', [galeriController::class, 'showDetail'])->name('galeri.detail');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
- 
+
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.index');

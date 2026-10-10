@@ -88,7 +88,12 @@ class guruController extends Controller
 
     public function showDetail($id)
     {
-        return $this->show($id);
+        $guru = guru::where('id_guru', $id)->firstOrFail(); 
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            return view('guru.detail', compact('guru'));
+        }
+
+        return view('landing.guru-detail', compact('guru'));
     }
 
     public function destroy($id)
