@@ -21,11 +21,11 @@
             transition: all 0.3s ease;
             position: fixed;
             top: 0;
-            left: -280px; /* Sembunyikan secara default di HP */
+            left: -280px; 
             z-index: 1050;
         }
         #sidebar.active {
-            left: 0; /* Munculkan saat aktif */
+            left: 0; 
         }
         #sidebar .sidebar-header {
             padding: 22px 20px;
@@ -57,10 +57,9 @@
             transition: all 0.3s ease;
         }
         
-        /* Tampilan di Laptop / Layar Besar */
         @media (min-width: 992px) {
             #sidebar {
-                left: 0; /* Selalu tampil di laptop */
+                left: 0; 
             }
             #sidebar.active {
                 left: -280px; 
@@ -86,7 +85,6 @@
             padding: 20px;
         }
         
-        /* Overlay gelap saat sidebar muncul di HP */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -104,12 +102,10 @@
 </head>
 <body>
 
-    <!-- Overlay untuk HP -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="wrapper d-flex flex-column flex-lg-row">
         
-        <!-- SIDEBAR -->
         <nav id="sidebar">
             <div class="sidebar-header d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
@@ -123,7 +119,6 @@
                     @endif
                     <h5 class="fw-bold mb-0 text-white" style="font-size: 1.1rem;">{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</h5>
                 </div>
-                <!-- Tombol Close Sidebar di HP -->
                 <button class="btn text-white d-lg-none" id="sidebarCloseBtn">
                     <i class="fa-solid fa-xmark fs-5"></i>
                 </button>
@@ -157,7 +152,7 @@
                 </li>
                 <li>
                     <a href="{{ route('galeri.index') }}" class="{{ Request::is('galeri*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-images me-2"></i> Galeri Foto
+                        <i class="fa-solid fa-images me-2"></i> Galeri Foto  & Video
                     </a>
                 </li>
                 <li>
@@ -187,9 +182,7 @@
 
         <div id="content">
             
-            <!-- TOP NAVBAR -->
             <nav class="navbar navbar-expand navbar-top px-4 d-flex justify-content-between align-items-center">
-                <!-- Tombol Hamburger (Hanya tampil di HP/Tablet, otomatis sembunyi di Laptop berkat d-lg-none) -->
                 <button class="btn btn-light border shadow-sm d-lg-none" id="sidebarToggle" type="button">
                     <i class="fa-solid fa-bars text-dark"></i>
                 </button>
@@ -242,7 +235,6 @@
         </div>
     </div>
 
-    <!-- Script Bootstrap & Toggle Hamburger -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const sidebar = document.getElementById('sidebar');
