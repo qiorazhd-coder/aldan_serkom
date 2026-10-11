@@ -130,7 +130,8 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="{{ route('admin.index') }}" class="{{ Request::is('dashboard*') ? 'active' : '' }}">
+                    <!-- Diubah dari admin.index menjadi dashboard -->
+                    <a href="{{ route('dashboard') }}" class="{{ Request::is('dashboard*') ? 'active' : '' }}">
                         <i class="fa-solid fa-house me-2"></i> Beranda Utama
                     </a>
                 </li>
@@ -156,7 +157,7 @@
                 </li>
                 <li>
                     <a href="{{ route('galeri.index') }}" class="{{ Request::is('galeri*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-images me-2"></i> Galeri Foto  & Video
+                        <i class="fa-solid fa-images me-2"></i> Galeri Foto & Video
                     </a>
                 </li>
                 <li>

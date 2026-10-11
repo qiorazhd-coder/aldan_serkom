@@ -167,8 +167,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-lg-center gap-lg-3">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav align-items-lg-center gap-lg-3 mx-auto">
                     <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="#profil">Profil</a></li>
                     <li class="nav-item"><a class="nav-link" href="#guru">Guru & Staf</a></li>
@@ -176,17 +176,38 @@
                     <li class="nav-item"><a class="nav-link" href="#ekstrakulikuler">Ekskul</a></li>
                     <li class="nav-item"><a class="nav-link" href="#galeri">Galeri</a></li>
                     <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
-                    <!-- <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        @auth
-                            <a href="{{ route('admin.index') }}"
-                                class="btn btn-sm btn-dark px-4 py-2 rounded-pill fw-bold shadow-sm">Dashboard Admin</a>
-                        @else
-                            <a href="{{ route('login') }}"
-                                class="btn btn-sm btn-warning px-4 py-2 rounded-pill fw-bold shadow-sm">Login Admin</a>
-                        @endauth
-                    </li> -->
                 </ul>
-            </div>
+
+
+                <!-- <div class="d-flex align-items-center mt-3 mt-lg-0">
+                    @auth
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle bg-light px-3 py-1.5 rounded-pill border shadow-sm" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold me-2" style="width: 35px; height: 35px;">
+                                    {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                                </div>
+                                <div class="text-start lh-sm pe-1">
+                                    <span class="fw-bold text-dark d-block" style="font-size: 0.9rem;">{{ Auth::user()->username }}</span>
+                                    <small class="text-muted" style="font-size: 0.75rem;">{{ ucfirst(Auth::user()->role) }}</small>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="dropdownUser1">
+                                <li><a class="dropdown-item py-2" href="{{ route('dashboard') }}"><i class="fa-solid fa-gauge me-2 text-warning"></i>Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item py-2 text-danger"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-sm btn-warning px-4 py-2 rounded-pill fw-bold shadow-sm">Login Admin</a>
+                    @endauth
+                </div>
+
+            </div> -->
         </div>
     </nav>
 
@@ -302,6 +323,7 @@
         </div>
     </section>
 
+    <!-- GURU & STAF SECTION -->
     <section id="guru" class="full-screen-section bg-light">
         <div class="container">
             <div class="text-center mb-5">
@@ -347,6 +369,7 @@
         </div>
     </section>
 
+    <!-- BERITA SECTION -->
     <section id="berita" class="full-screen-section bg-white">
         <div class="container">
             <div class="text-center mb-5">
@@ -393,6 +416,7 @@
         </div>
     </section>
 
+    <!-- EKSTRAKURIKULER SECTION -->
     <section id="ekstrakulikuler" class="full-screen-section bg-light">
         <div class="container">
             <div class="text-center mb-5">
@@ -444,6 +468,7 @@
         </div>
     </section>
 
+    <!-- GALERI SECTION -->
     <section id="galeri" class="full-screen-section bg-white">
         <div class="container">
             <div class="text-center mb-5">

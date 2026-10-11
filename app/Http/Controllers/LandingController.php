@@ -34,4 +34,12 @@ class LandingController extends Controller
             'totalEkstrakurikuler'
         ));
     }
+
+    // Method baru untuk menampilkan halaman profil sekolah terpisah
+    public function profilPublic()
+    {
+        $globalProfile = DB::table('profile_sekolah')->first();
+
+        return view('landing.profil', compact('globalProfile'));
+    }
 }

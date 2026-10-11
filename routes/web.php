@@ -13,6 +13,7 @@ use App\Http\Controllers\galeriController;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\AuthController;
 
+Route::get('/profil-sekolah', [LandingController::class, 'profilPublic'])->name('landing.profil');
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
@@ -23,7 +24,6 @@ Route::get('/berita/detail/{slug}', [beritaController::class, 'showDetail'])->na
 Route::get('/guru/detail/{id}', [guruController::class, 'showDetail'])->name('guru.detail');
 Route::get('/siswa/detail/{id}', [siswaController::class, 'showDetail'])->name('siswa.detail');
 Route::get('/ekstrakulikuler/detail/{id}', [ekstrakulikulerController::class, 'showDetail'])->name('ekstrakulikuler.detail');
-Route::get('/guru/detail/{id}', [guruController::class, 'showDetail'])->name('guru.detail');
 Route::get('/galeri/detail/{id}', [galeriController::class, 'showDetail'])->name('galeri.detail');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -32,7 +32,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.index');
+    // Rute utama dashboard menggunakan nama 'dashboard' secara konsisten
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profileSekolah', [profileSekolahController::class, 'index'])->name('profileSekolah.index');
     Route::get('/profileSekolah/edit', [profileSekolahController::class, 'edit'])->name('profileSekolah.edit');
