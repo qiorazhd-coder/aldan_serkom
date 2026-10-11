@@ -55,15 +55,6 @@
                     </div>
                 </div>
 
-                <div class="d-flex gap-2 w-100 mt-3">
-                    <a href="#visi_misi" class="btn text-white w-50 py-2 fw-semibold small" style="background-color: #0d233a; border-radius: 8px;">
-                        Lihat Visi & Misi
-                    </a>
-                    <a href="tel:{{ $profileSekolah->kontak ?? '' }}" class="btn text-white w-50 py-2 fw-semibold small" style="background-color: #0d233a; border-radius: 8px;">
-                        Hubungi Sekolah
-                    </a>
-                </div>
-
             </div>
         </div>
 

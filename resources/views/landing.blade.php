@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }} - Portal Resmi Sekolah</title>
+    <title>{{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA' }}</title>
+    @if (!empty($globalProfile->logo))
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . str_replace('public/', '', $globalProfile->logo)) }}">
+    @endif
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         html {
             scroll-behavior: smooth;
@@ -172,7 +176,7 @@
                     <li class="nav-item"><a class="nav-link" href="#ekstrakulikuler">Ekskul</a></li>
                     <li class="nav-item"><a class="nav-link" href="#galeri">Galeri</a></li>
                     <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                    <!-- <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
                         @auth
                             <a href="{{ route('admin.index') }}"
                                 class="btn btn-sm btn-dark px-4 py-2 rounded-pill fw-bold shadow-sm">Dashboard Admin</a>
@@ -180,7 +184,7 @@
                             <a href="{{ route('login') }}"
                                 class="btn btn-sm btn-warning px-4 py-2 rounded-pill fw-bold shadow-sm">Login Admin</a>
                         @endauth
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
