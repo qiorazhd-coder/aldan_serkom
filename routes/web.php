@@ -13,9 +13,9 @@ use App\Http\Controllers\galeriController;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/profil-sekolah', [LandingController::class, 'profilPublic'])->name('landing.profil');
-
+// Rute Publik (Landing Page & Halaman Profil Terpisah)
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::get('/profil-sekolah', [LandingController::class, 'profilPublic'])->name('landing.profil');
 
 Route::get('/daftar-ekstrakulikuler', [ekstrakulikulerController::class, 'publicIndex'])->name('landing.ekstrakulikuler');
 Route::get('/daftar-ekstrakulikuler/detail/{id}', [ekstrakulikulerController::class, 'publicDetail'])->name('landing.ekstrakulikuler.detail');
@@ -26,13 +26,15 @@ Route::get('/siswa/detail/{id}', [siswaController::class, 'showDetail'])->name('
 Route::get('/ekstrakulikuler/detail/{id}', [ekstrakulikulerController::class, 'showDetail'])->name('ekstrakulikuler.detail');
 Route::get('/galeri/detail/{id}', [galeriController::class, 'showDetail'])->name('galeri.detail');
 
+// Rute Autentikasi
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Rute Logout mendukung GET & POST agar terhindar dari MethodNotAllowedHttpException
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Rute Admin (Protected / Middleware Auth)
 Route::middleware('auth')->group(function () {
-
-    // Rute utama dashboard menggunakan nama 'dashboard' secara konsisten
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profileSekolah', [profileSekolahController::class, 'index'])->name('profileSekolah.index');
@@ -80,5 +82,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/{id}/edit', [userController::class, 'edit'])->name('user.edit');
     Route::put('/user/{id}', [userController::class, 'update'])->name('user.update');
     Route::delete('/user/{id}', [userController::class, 'destroy'])->name('user.destroy');
-
 });

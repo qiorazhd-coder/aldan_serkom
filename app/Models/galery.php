@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class galery extends Model
+class Galery extends Model
 {
     use HasFactory;
 
-    protected $table = 'galeries';  
-    protected $primaryKey = 'id_galeri';  
+    protected $table = 'galeri'; 
+    protected $primaryKey = 'id_galeri';
 
     protected $fillable = [
         'judul',
-        'foto',
-        'video', // Tambahkan kolom video / youtube link
+        'jenis',
         'deskripsi',
+        'foto',
+        'video',
     ];
-
 }

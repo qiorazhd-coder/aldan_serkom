@@ -14,13 +14,15 @@ class LandingController extends Controller
         $globalProfile = DB::table('profile_sekolah')->first(); 
         $berita = DB::table('berita')->latest()->take(3)->get();
         $guru = Guru::latest()->take(4)->get();
-        $galeri = DB::table('galeries')->latest()->take(6)->get();
+        
+        $galeri = DB::table('galeri')->latest()->take(6)->get();
 
         $ekstrakulikulers = Ekstrakulikuler::latest()->take(6)->get();
 
-        $totalSiswa = DB::table('siswa')->count();
+        $siswas = DB::table('siswas')->latest()->get();
+
+        $totalSiswa = DB::table('siswas')->count();
         $totalGuru = Guru::count();
-        
         $totalEkstrakurikuler = Ekstrakulikuler::count();
 
         return view('landing', compact(
@@ -29,17 +31,18 @@ class LandingController extends Controller
             'guru', 
             'galeri', 
             'ekstrakulikulers', 
+            'siswas', 
             'totalSiswa', 
             'totalGuru', 
             'totalEkstrakurikuler'
         ));
     }
 
-    // Method baru untuk menampilkan halaman profil sekolah terpisah
+   
     public function profilPublic()
-    {
-        $globalProfile = DB::table('profile_sekolah')->first();
+{
+    $globalProfile = DB::table('profile_sekolah')->first();
 
-        return view('landing.profil', compact('globalProfile'));
-    }
+    return view('landing.profil', compact('globalProfile')); 
+}
 }

@@ -9,15 +9,14 @@ use App\Models\ProfileSekolah;
 use App\Models\Ekstrakulikuler;
 use Illuminate\Support\Facades\DB; 
 
-
 class DashboardController extends Controller
 {
-   public function index()
+    public function index()
     {
         $totalSiswa = Siswa::count();
         $totalGuru = Guru::count();
         $totalBerita = Berita::count();
-        $totalGaleri = DB::table('galeries')->count(); 
+        $totalGaleri = DB::table('galeri')->count(); // <-- Diubah dari 'galeries' menjadi 'galeri'
         
         $profileSekolah = ProfileSekolah::first() ?? new ProfileSekolah();
         $profile = $profileSekolah; 

@@ -6,24 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+    public function up()
     {
-        Schema::create('cache', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->mediumText('value');
-            $table->integer('expiration')->index();
-        });
-
-        Schema::create('cache_locks', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->string('owner');
-            $table->integer('expiration')->index();
+        Schema::create('siswa', function (Blueprint $table) {
+            $table->id('id_siswa');
+            $table->string('nisn', 10)->unique();
+            $table->string('nama_siswa', 40);
+            $table->string('kelas', 30); 
+            $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
+            $table->year('tahun_masuk');
+            $table->timestamps();
         });
     }
 
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('cache');
-        Schema::dropIfExists('cache_locks');
+        Schema::dropIfExists('siswa');
     }
 };

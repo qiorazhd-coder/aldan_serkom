@@ -18,35 +18,38 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['username' => 'admin'],
             [
-                'password' => Hash::make('admin123'),
-                'role'     => 'Admin',
+                'password'    => Hash::make('admin123'),
+                'role'        => 'Admin',
             ]
         );
 
         // 2. Seeding Data 3 Siswa
         $siswas = [
             [
-                'nisn' => '0098863201',
-                'nama_siswa' => 'Ahmad Fauzi',
+                'nisn'          => '0098863201',
+                'nama_siswa'    => 'Ahmad Fauzi',
+                'kelas'         => 'X PPLG', // <-- Ditambahkan
                 'jenis_kelamin' => 'Laki-Laki',
-                'tahun_masuk' => 2024,
+                'tahun_masuk'   => 2024,
             ],
             [
-                'nisn' => '0098863202',
-                'nama_siswa' => 'Siti Nurhaliza',
+                'nisn'          => '0098863202',
+                'nama_siswa'    => 'Siti Nurhaliza',
+                'kelas'         => 'XI PPLG', // <-- Ditambahkan
                 'jenis_kelamin' => 'Perempuan',
-                'tahun_masuk' => 2024,
+                'tahun_masuk'   => 2024,
             ],
             [
-                'nisn' => '0098863203',
-                'nama_siswa' => 'Rizky Ramadhan',
+                'nisn'          => '0098863203',
+                'nama_siswa'    => 'Rizky Ramadhan',
+                'kelas'         => 'XII PPLG', // <-- Ditambahkan
                 'jenis_kelamin' => 'Laki-Laki',
-                'tahun_masuk' => 2025,
+                'tahun_masuk'   => 2025,
             ],
         ];
 
         foreach ($siswas as $siswa) {
-            DB::table('siswa')->updateOrInsert(
+            DB::table('siswas')->updateOrInsert(
                 ['nisn' => $siswa['nisn']],
                 array_merge($siswa, [
                     'created_at' => now(),
@@ -58,22 +61,22 @@ class DatabaseSeeder extends Seeder
         // 3. Seeding Data 3 Guru & Staf
         $gurus = [
             [
-                'nip' => '198507102010011002',
+                'nip'       => '198507102010011002',
                 'nama_guru' => 'Reski Ramadhan, S.Pd',
-                'mapel' => 'IPA',
-                'foto' => '',
+                'mapel'     => 'IPA',
+                'foto'      => '',
             ],
             [
-                'nip' => '098765445754',
+                'nip'       => '098765445754',
                 'nama_guru' => 'Kamiel Fatan, M.Pd',
-                'mapel' => 'PAI',
-                'foto' => '',
+                'mapel'     => 'PAI',
+                'foto'      => '',
             ],
             [
-                'nip' => '098765476543',
+                'nip'       => '098765476543',
                 'nama_guru' => 'Fitrah Nurdiansyah, S.Kom',
-                'mapel' => 'Matematika',
-                'foto' => '',
+                'mapel'     => 'Matematika',
+                'foto'      => '',
             ],
         ];
 
@@ -91,17 +94,17 @@ class DatabaseSeeder extends Seeder
         DB::table('profile_sekolah')->updateOrInsert(
             ['id' => 1],
             [
-                'nama_sekolah' => 'SMK MUTIARA SALAWU',
+                'nama_sekolah'   => 'SMK MUTIARA SALAWU',
                 'kepala_sekolah' => 'Lindawati S.pd',
-                'npsn' => '008644',
-                'alamat' => 'langkob',
-                'kontak' => '98765',
-                'visi_misi' => 'Menjadi lembaga vokasi terdepan yang menghasilkan lulusan unggul, berkarakter mulia, kompeten, dan siap kerja melalui pembelajaran berbasis industri serta penguatan jiwa kewirausahaan',
-                'tahun_berdiri' => '2023',
-                'deskripsi' => 'Selamat datang di portal resmi sekolah kami. Kami berkomitmen penuh untuk menghadirkan pendidikan kejuruan berkualitas yang membekali peserta didik dengan keterampilan profesional (hard skills), karakter mulia (soft skills), serta kesiapan penuh untuk menghadapi dunia kerja, industri, maupun berwirausaha.',
-                'logo' => '',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'npsn'           => '008644',
+                'alamat'         => 'langkob',
+                'kontak'         => '98765',
+                'visi_misi'      => 'Menjadi lembaga vokasi terdepan yang menghasilkan lulusan unggul, berkarakter mulia, kompeten, dan siap kerja melalui pembelajaran berbasis industri serta penguatan jiwa kewirausahaan',
+                'tahun_berdiri'  => '2023',
+                'deskripsi'      => 'Selamat datang di portal resmi sekolah kami. Kami berkomitmen penuh untuk menghadirkan pendidikan kejuruan berkualitas yang membekali peserta didik dengan keterampilan profesional (hard skills), karakter mulia (soft skills), serta kesiapan penuh untuk menghadapi dunia kerja, industri, maupun berwirausaha.',
+                'logo'           => '',
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ]
         );
 
@@ -109,27 +112,27 @@ class DatabaseSeeder extends Seeder
         $ekskuls = [
             [
                 'id_ekstrakulikuler' => 1,
-                'nama_ekskul' => 'Pramuka',
-                'pembina' => 'Drs. Budi Santoso',
-                'jadwal_latihan' => 'Jumat, 15:30 WIB',
-                'deskripsi' => 'Ekstrakurikuler wajib untuk melatih kedisiplinan, kemandirian, dan jiwa kepemimpinan siswa.',
-                'gambar' => '',
+                'nama_ekskul'        => 'Pramuka',
+                'pembina'            => 'Drs. Budi Santoso',
+                'jadwal_latihan'     => 'Jumat, 15:30 WIB',
+                'deskripsi'          => 'Ekstrakurikuler wajib untuk melatih kedisiplinan, kemandirian, dan jiwa kepemimpinan siswa.',
+                'gambar'             => '',
             ],
             [
                 'id_ekstrakulikuler' => 2,
-                'nama_ekskul' => 'Paskibra',
-                'pembina' => 'Siti Aminah, S.Pd.',
-                'jadwal_latihan' => 'Selasa, 15:00 WIB',
-                'deskripsi' => 'Wadah pembinaan pasukan pengibar bendera untuk melatih ketangkasan baris-berbaris dan nasionalisme.',
-                'gambar' => '',
+                'nama_ekskul'        => 'Paskibra',
+                'pembina'            => 'Siti Aminah, S.Pd.',
+                'jadwal_latihan'     => 'Selasa, 15:00 WIB',
+                'deskripsi'          => 'Wadah pembinaan pasukan pengibar bendera untuk melatih ketangkasan baris-berbaris dan nasionalisme.',
+                'gambar'             => '',
             ],
             [
                 'id_ekstrakulikuler' => 3,
-                'nama_ekskul' => 'Futsal',
-                'pembina' => 'Rian Hidayat, M.Pd.',
-                'jadwal_latihan' => 'Rabu, 16:00 WIB',
-                'deskripsi' => 'Mengembangkan bakat, strategi, kerja sama tim, dan sportivitas siswa dalam bidang olahraga futsal.',
-                'gambar' => '',
+                'nama_ekskul'        => 'Futsal',
+                'pembina'            => 'Rian Hidayat, M.Pd.',
+                'jadwal_latihan'     => 'Rabu, 16:00 WIB',
+                'deskripsi'          => 'Mengembangkan bakat, strategi, kerja sama tim, dan sportivitas siswa dalam bidang olahraga futsal.',
+                'gambar'             => '',
             ],
         ];
 

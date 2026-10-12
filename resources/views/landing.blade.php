@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA' }}</title>
+    <title>{{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA SALAWU' }}</title>
     @if (!empty($globalProfile->logo))
         <link rel="icon" type="image/png" href="{{ asset('storage/' . str_replace('public/', '', $globalProfile->logo)) }}">
     @endif
@@ -162,7 +162,7 @@
                 @else
                     <i class="fa-solid fa-graduation-cap text-warning fs-3"></i>
                 @endif
-                <span class="fs-5">{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</span>
+                <span class="fs-5">{{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA SALAWU' }}</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -172,42 +172,17 @@
                     <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="#profil">Profil</a></li>
                     <li class="nav-item"><a class="nav-link" href="#guru">Guru & Staf</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#siswa">Siswa</a></li>
                     <li class="nav-item"><a class="nav-link" href="#berita">Berita</a></li>
                     <li class="nav-item"><a class="nav-link" href="#ekstrakulikuler">Ekskul</a></li>
                     <li class="nav-item"><a class="nav-link" href="#galeri">Galeri</a></li>
                     <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
                 </ul>
 
-
-                <!-- <div class="d-flex align-items-center mt-3 mt-lg-0">
-                    @auth
-                        <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle bg-light px-3 py-1.5 rounded-pill border shadow-sm" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold me-2" style="width: 35px; height: 35px;">
-                                    {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                                </div>
-                                <div class="text-start lh-sm pe-1">
-                                    <span class="fw-bold text-dark d-block" style="font-size: 0.9rem;">{{ Auth::user()->username }}</span>
-                                    <small class="text-muted" style="font-size: 0.75rem;">{{ ucfirst(Auth::user()->role) }}</small>
-                                </div>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="dropdownUser1">
-                                <li><a class="dropdown-item py-2" href="{{ route('dashboard') }}"><i class="fa-solid fa-gauge me-2 text-warning"></i>Dashboard</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item py-2 text-danger"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-sm btn-warning px-4 py-2 rounded-pill fw-bold shadow-sm">Login Admin</a>
-                    @endauth
+                <div class="d-flex align-items-center mt-3 mt-lg-0">
+                    <a href="{{ route('landing.profil') }}" class="btn btn-sm btn-outline-dark px-3 py-2 rounded-pill fw-bold shadow-sm me-2">Profil Saya</a>
                 </div>
-
-            </div> -->
+            </div>
         </div>
     </nav>
 
@@ -230,7 +205,7 @@
                         </p>
                     </div>
 
-                    <!-- 3 Kotak Statistik -->
+                    <!-- Kotak Statistik -->
                     <div class="p-3 bg-white bg-opacity-10 rounded-4 shadow-lg backdrop-blur border border-light border-opacity-25 mx-auto mb-4" style="max-width: 750px;">
                         <div class="row text-center g-3">
                             <div class="col-4 border-end border-light border-opacity-25">
@@ -248,7 +223,6 @@
                         </div>
                     </div>
 
-                    <!-- Informasi Kontak, Email, & Alamat di Beranda -->
                     <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 text-light small text-shadow-custom">
                         @if(!empty($globalProfile->kontak))
                             <div>
@@ -297,7 +271,7 @@
 
                         <div class="mb-3">
                             <span class="text-muted small d-block fw-bold text-uppercase">Tahun Berdiri</span>
-                            <p class="fw-semibold text-dark mb-0">{{ $globalProfile->tahun_berdiri ?? '2020' }}</p>
+                            <p class="fw-semibold text-dark mb-0">{{ $globalProfile->tahun_berdiri ?? '2023' }}</p>
                         </div>
 
                         <div class="mb-3">
@@ -369,8 +343,62 @@
         </div>
     </section>
 
+    <!-- SISWA SECTION (Tabel Data Siswa) -->
+    <section id="siswa" class="full-screen-section bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-semibold mb-2">Direktori Peserta Didik</span>
+                <h2 class="fw-bold text-dark display-6">Data Siswa Aktif</h2>
+                <p class="text-muted lead fs-6">Daftar siswa dan tahun masuk di sekolah.</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card card-custom border-0 shadow-sm p-3 p-md-4 bg-white">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="py-3 px-4">#</th>
+                                        <th scope="col" class="py-3">NISN</th>
+                                        <th scope="col" class="py-3">Nama Siswa</th>
+                                        <th scope="col" class="py-3">Jenis Kelamin</th>
+                                        <th scope="col" class="py-3 text-center">Tahun Masuk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($siswas)
+                                        @forelse($siswas as $index => $s)
+                                            <tr>
+                                                <th scope="row" class="px-4 text-muted">{{ $index + 1 }}</th>
+                                                <td class="fw-semibold text-secondary">{{ $s->nisn }}</td>
+                                                <td>
+                                                    <div class="fw-bold text-dark">{{ $s->nama_siswa }}</div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge {{ $s->jenis_kelamin == 'Laki-Laki' ? 'bg-primary' : 'bg-danger' }} bg-opacity-10 text-{{ $s->jenis_kelamin == 'Laki-Laki' ? 'primary' : 'danger' }} px-2.5 py-1.5">
+                                                        {{ $s->jenis_kelamin }}
+                                                    </span>
+                                                </td>
+                                                <td class="text-center fw-semibold text-dark">{{ $s->tahun_masuk }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center py-4 text-muted">Belum ada data siswa.</td>
+                                            </tr>
+                                        @endforelse
+                                    @endisset
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- BERITA SECTION -->
-    <section id="berita" class="full-screen-section bg-white">
+    <section id="berita" class="full-screen-section bg-light">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="fw-bold text-dark display-6">Berita & Informasi Terbaru</h2>
@@ -417,7 +445,7 @@
     </section>
 
     <!-- EKSTRAKURIKULER SECTION -->
-    <section id="ekstrakulikuler" class="full-screen-section bg-light">
+    <section id="ekstrakulikuler" class="full-screen-section bg-white">
         <div class="container">
             <div class="text-center mb-5">
                 <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-semibold mb-2">Kegiatan Siswa</span>
@@ -469,7 +497,7 @@
     </section>
 
     <!-- GALERI SECTION -->
-    <section id="galeri" class="full-screen-section bg-white">
+    <section id="galeri" class="full-screen-section bg-light">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="fw-bold text-dark display-6">Galeri Kegiatan Sekolah</h2>
@@ -533,7 +561,7 @@
         <div class="container my-auto py-5">
             <div class="row g-5 mb-4">
                 <div class="col-lg-5">
-                    <h3 class="fw-bold text-white mb-3">{{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}</h3>
+                    <h3 class="fw-bold text-white mb-3">{{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA SALAWU' }}</h3>
                     <h5 class="text-warning fw-semibold mb-2">Visi & Misi</h5>
                     <p class="text-light opacity-75" style="line-height: 1.8; white-space: pre-line;">
                         {{ $globalProfile->visi_misi ?? 'Pusat pendidikan kejuruan berkualitas tinggi yang berkarakter dan siap kerja.' }}
@@ -560,6 +588,7 @@
                                 class="text-decoration-none text-light opacity-75">Profil</a></li>
                         <li class="mb-2"><a href="#guru" class="text-decoration-none text-light opacity-75">Guru
                                 & Staf</a></li>
+                        <li class="mb-2"><a href="#siswa" class="text-decoration-none text-light opacity-75">Siswa</a></li>
                         <li class="mb-2"><a href="#berita"
                                 class="text-decoration-none text-light opacity-75">Berita</a></li>
                         <li class="mb-2"><a href="#ekstrakulikuler"
@@ -571,7 +600,7 @@
             </div>
             <hr class="border-secondary opacity-50 my-4">
             <div class="text-center text-muted small">
-                &copy; {{ date('Y') }} {{ $globalProfile->nama_sekolah ?? 'Aldan Serkom' }}. All rights reserved.
+                &copy; {{ date('Y') }} {{ $globalProfile->nama_sekolah ?? 'SMK MUTIARA SALAWU' }}. All rights reserved.
             </div>
         </div>
     </footer>

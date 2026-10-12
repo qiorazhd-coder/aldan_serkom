@@ -34,6 +34,24 @@
                     @enderror
                 </div>
 
+                <!-- Input Kelas Dinamis dari Database -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-dark">Kelas</label>
+                    <select name="kelas" class="form-select @error('kelas') is-invalid @enderror" required style="border-radius: 8px;">
+                        <option value="" selected disabled>-- Pilih Kelas --</option>
+                        @isset($kelas)
+                            @foreach($kelas as $k)
+                                <option value="{{ $k->nama_kelas }}" {{ old('kelas') == $k->nama_kelas ? 'selected' : '' }}>
+                                    {{ $k->nama_kelas }}
+                                </option>
+                            @endforeach
+                        @endisset
+                    </select>
+                    @error('kelas')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label fw-semibold text-dark">Jenis Kelamin</label>
                     <select name="jenis_kelamin" class="form-select @error('jenis_kelamin') is-invalid @enderror" required style="border-radius: 8px;">
